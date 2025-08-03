@@ -1,5 +1,6 @@
 import { post } from '@/utils/http'
 
+// 使用类型字面量 + as const 来定义常量替代enum类型
 const Api = {
   Login: '/login'
 }as const

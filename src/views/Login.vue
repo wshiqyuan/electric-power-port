@@ -2,7 +2,8 @@
   import logo from '@/assets/logo.png'
   import { reactive, ref } from 'vue'
   import type { FormInstance, FormRules } from 'element-plus';
-
+  import { useUserStore } from '@/store/auth.ts'
+  
   interface RuleForm{
     username: string;
     password: string;
@@ -24,12 +25,12 @@
       { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[#$_&^@]).{8,16}$/, message: '密码必须包含字母、数字和特殊符号(#$_&^@)' }
     ]
   })
-
+  const userStore = useUserStore()
   const formRef = ref<FormInstance>()
   const handleLogin = async () => {
     formRef.value?.validate((valid) => {
       if(valid){
-        
+        userStore.login(ruleForm)
       }
     })
   }
@@ -61,7 +62,7 @@
         </el-form-item>
         <el-form-item>
           <el-button 
-            type="primary" 
+            type="primary"
             style="width: 100%;"
             @click="handleLogin"
             >登录</el-button>
