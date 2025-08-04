@@ -172,7 +172,7 @@ Mock.mock("https://www.demo.com/login","post",(options:any) => {
           useranme:'admin',
           roles:["admin"]
         },
-        menulist:menulist
+        menulist
       }
     }
   } else if(username === "user" && password === "_user666") {
@@ -185,7 +185,7 @@ Mock.mock("https://www.demo.com/login","post",(options:any) => {
           useranme:'user',
           roles:["user"]
         },
-        menulist:menulist2
+        menulist2
       }
     }
   } else {

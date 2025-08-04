@@ -3,6 +3,7 @@
   import { reactive, ref } from 'vue'
   import type { FormInstance, FormRules } from 'element-plus';
   import { useUserStore } from '@/store/auth.ts'
+  import { useRouter } from 'vue-router';
   
   interface RuleForm{
     username: string;
@@ -25,12 +26,15 @@
       { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[#$_&^@]).{8,16}$/, message: '密码必须包含字母、数字和特殊符号(#$_&^@)' }
     ]
   })
+
   const userStore = useUserStore()
+  const router = useRouter()
   const formRef = ref<FormInstance>()
   const handleLogin = async () => {
-    formRef.value?.validate((valid) => {
+    formRef.value?.validate(async (valid: boolean) => {
       if(valid){
-        userStore.login(ruleForm)
+        await userStore.login(ruleForm)
+        router.push("/")
       }
     })
   }

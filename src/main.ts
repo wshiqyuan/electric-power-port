@@ -7,6 +7,7 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
 import './mock'
+import './router/guard'
 
 const app = createApp(App)
 const pinia = createPinia()

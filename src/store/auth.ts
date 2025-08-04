@@ -8,15 +8,15 @@ interface LoginParams {
 
 const useUserStore = defineStore('user', {
   state: () => ({
-      token: sessionStorage.getItem('token') || null,
+      token: sessionStorage.getItem('token') || '',
       roles: JSON.parse(sessionStorage.getItem('roles') || '[]'),
       username: sessionStorage.getItem('username') || '',
-      menu: JSON.parse(sessionStorage.getItem('menu') || '[]')
+      menu: sessionStorage.getItem('menu') ? JSON.parse(sessionStorage.getItem('menu')!) : []
     }),
     actions:{
-      async login(data:LoginParams) {
+      async login(data: LoginParams) {
         try{
-          const { data:{ token, user:{ username, roles } }, menulist } = await loginApi(data)
+          const { data:{ token, user:{ username, roles }, menulist } } = await loginApi(data)
           this.token = token
           this.username = username
           this.roles = roles
@@ -24,7 +24,7 @@ const useUserStore = defineStore('user', {
           sessionStorage.setItem('token',token)
           sessionStorage.setItem('username',username)
           sessionStorage.setItem('roles',JSON.stringify(roles))
-          sessionStorage.setItem('menu',JSON.stringify(menulist))
+          sessionStorage.setItem('menu',JSON.stringify(menulist || []))
         } catch(err) {
           console.log("err",err)
         }
