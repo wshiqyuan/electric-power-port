@@ -16,8 +16,9 @@
   </div>
   <el-menu
     :router="true"
-    default-active="$route.path"
-  >
+    :default-active="$route.path"
+    class="el-menu-demo"
+    >
     <menu-item 
     v-for="item in menuItems" 
     :item="item"
