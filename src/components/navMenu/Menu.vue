@@ -4,8 +4,6 @@
   import logo from '@/assets/logo.png'
 
   const userStore = useUserStore()
-  console.log(userStore.menu)
-  
   const menuItems = userStore.menu
 </script>
 

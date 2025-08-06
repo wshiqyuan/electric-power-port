@@ -69,6 +69,7 @@
             type="primary"
             style="width: 100%;"
             @click="handleLogin"
+            @keyup.enter="handleLogin"
             >登录</el-button>
         </el-form-item>
       </el-form>

@@ -6,11 +6,15 @@ router.beforeEach((to, ) => {
   const isLogin = userStore.token
   if(!isLogin) {
     if(to.path !== '/login'){
-      router.push('/login')
+      return {path:'/login'}
     }
   } else{
     if(to.path === '/login'){
-      router.push('/')
+      return {path:'/'}
+    }
+
+    if(to.meta?.needAuth && !userStore.roles.some((role: string) => (to.meta.needAuth as string[]).includes(role))) {
+      return {path:'/'}
     }
   }
 })

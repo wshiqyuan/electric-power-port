@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Menu from '@/components/navMenu/Menu.vue'
+  import TopHeader from '@/components/topHeader/TopHeader.vue'
 </script>
 
 <template>
@@ -9,7 +10,9 @@
         <Menu />
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <TopHeader />
+        </el-header>
         <el-main>
           <router-view />
         </el-main>

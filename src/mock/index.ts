@@ -169,7 +169,7 @@ Mock.mock("https://www.demo.com/login","post",(options:any) => {
       data:{
         token:"admintoken123122",
         user:{
-          useranme:'admin',
+          username:'admin',
           roles:["admin"]
         },
         menulist: menulist
@@ -182,7 +182,7 @@ Mock.mock("https://www.demo.com/login","post",(options:any) => {
       data:{
         token:"usertokenqewq312",
         user:{
-          useranme:'user',
+          username:'user',
           roles:["user"]
         },
         menulist: menulist2

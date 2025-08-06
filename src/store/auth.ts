@@ -16,19 +16,26 @@ const useUserStore = defineStore('user', {
     actions:{
       async login(data: LoginParams) {
         try {
-            const { data: { token, user: { username, roles }, menulist } } = await loginApi(data);
-            this.token = token
-            this.roles = roles
-            this.menu = menulist
-            this.username = username;
-            sessionStorage.setItem("token", token)
-            sessionStorage.setItem("roles", JSON.stringify(roles))
-            sessionStorage.setItem("username", username)
-            sessionStorage.setItem("menu", JSON.stringify(menulist))
+          const { data: { token, user: { username, roles }, menulist } } = await loginApi(data);
+          this.token = token
+          this.roles = roles
+          this.menu = menulist
+          this.username = username;
+          sessionStorage.setItem("token", token)
+          sessionStorage.setItem("roles", JSON.stringify(roles))
+          sessionStorage.setItem("username", username)
+          sessionStorage.setItem("menu", JSON.stringify(menulist))
         } catch (error) {
       
         }
 
+      },
+      logout() {
+        this.token = ''
+        this.roles = []
+        this.menu = []
+        this.username = ''
+        sessionStorage.clear()
       }
     }
 
