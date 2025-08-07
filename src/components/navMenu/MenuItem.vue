@@ -2,6 +2,7 @@
   import { defineComponent } from 'vue'
   import type { MenuItem as MenuItemType } from '@/types/user'
   import type { PropType } from 'vue'
+  import { useTabsStore } from '@/store/tabs'
 
   export default defineComponent({
     name: "MyMenu",
@@ -9,6 +10,17 @@
       item: {
         type: Object as PropType<MenuItemType>,
         required: true
+      }
+    },
+    setup() {
+      const tabsStore = useTabsStore()
+      const { addTab, setCurrentTab } = tabsStore
+      const add = (name: string, url: string, icon:string) => {
+        addTab(name, url, icon)
+        setCurrentTab(name, url)
+      }
+      return{
+        add
       }
     }
   })
@@ -28,7 +40,12 @@
       :key="child.url"
     ></my-menu>
   </el-sub-menu>
-  <el-menu-item v-else :index="item.url" v-show="!(item.name === '订单详情')">
+  <el-menu-item 
+    v-else 
+    :index="item.url" 
+    @click="add(item.name, item.url, item.icon)" 
+    v-show="!(item.name === '订单详情')"
+  >
     <el-icon>
       <component :is="item.icon" />
     </el-icon>
