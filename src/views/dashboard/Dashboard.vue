@@ -8,9 +8,34 @@ import remain from '@/assets/remain.png'
 import total from '@/assets/total.png'
 import money from '@/assets/money.png'
 import daily from '@/assets/daily.png'
+import { ref } from 'vue'
 import { CaretBottom } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/tabs'
+import { useChart } from '@/hooks/useChart'
+
+const chartRef = ref(null)
+const chartOptions: any = {
+    title: {
+      text: 'ECharts 入门示例'
+    },
+    tooltip: {},
+    xAxis: {
+      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    },
+    yAxis: {},
+    series: [
+      {
+        name: '销量',
+        type: 'bar',
+        data: [5, 20, 36, 10, 10, 20]
+      }
+    ]
+  }
+
+useChart(chartRef, chartOptions)
+
+
 
 const router = useRouter()
 const { addTab, setCurrentTab } = useTabsStore()
@@ -18,7 +43,6 @@ const { addTab, setCurrentTab } = useTabsStore()
 const handleClick = (e: Event) => {
   const target = e.target as HTMLElement
   const colElement = target.closest('.el-col')
-  console.log(colElement)
   if (colElement) {
     const path = colElement.querySelector('img')?.dataset.path
     const icon = colElement.querySelector('img')?.classList[0] as string
@@ -185,6 +209,24 @@ const handleClick = (e: Event) => {
           </el-row>
         </div>
       </el-card>
+      <el-card class="mt">
+        <template #header>
+          <div class="card-header">
+            <h1>能源统计</h1>
+          </div>
+        </template>
+          <el-row>
+            <el-col :span="6">
+              <div ref="chartRef2" style="width: 100%; height: 400px;">
+              </div>
+            </el-col>
+            <el-col :span="18">
+              <div ref="chartRef" style="width: 100%; height: 400px;">
+
+              </div>
+            </el-col>
+          </el-row>
+      </el-card>
     </el-col>
     <el-col :span="6">
 
@@ -203,6 +245,17 @@ const handleClick = (e: Event) => {
     p {
       color: #86909c;
 
+    }
+  }
+
+  .quick {
+    .el-col {
+      img:hover {
+        cursor: pointer;
+      }
+      p{
+        cursor: pointer;
+      }
     }
   }
 

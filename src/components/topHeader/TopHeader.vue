@@ -6,7 +6,6 @@
 
   const info = ref(5)
   
-  // 优化后的时间逻辑
   const greeting = ref('您好')
   
   const getGreeting = (hour: number) => {
