@@ -8,33 +8,154 @@ import remain from '@/assets/remain.png'
 import total from '@/assets/total.png'
 import money from '@/assets/money.png'
 import daily from '@/assets/daily.png'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { CaretBottom } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/tabs'
 import { useChart } from '@/hooks/useChart'
+import { chartDataApi, chartDataApi2 } from '@/api/dashboard'
 
 const chartRef = ref(null)
-const chartOptions: any = {
+
+const setChartOptions = async () => {
+  const chartOptions: any = reactive({
     title: {
-      text: 'ECharts 入门示例'
+      text: '电量统计',
     },
-    tooltip: {},
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: [],
+    },
     xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+      type: 'category',
+      boundaryGap: false,
+      data: ['13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00','20:00','21:00']
     },
-    yAxis: {},
+    yAxis: {
+      type: 'value',
+      axisLabel:{
+        formatter:'{value}kw'
+      }
+    },
     series: [
       {
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20]
-      }
+        name: '',
+        type: 'line',
+        data: [],
+        smooth:true,
+        lineStyle:{
+          width: 4
+        },
+        itemStyle:{
+          color: 'purple',
+          shadowBlur: 5,
+          shadowColor: 'rgba(0,255,0,0.5)'
+        }
+      },
+      {
+        name: '',
+        type: 'line',
+        data: [],
+        smooth:true,
+        lineStyle:{
+          width: 4
+        },
+        itemStyle:{
+          color:'lightgreen',
+          shadowBlur: 5,
+          shadowColor: 'rgba(0,255,0,0.5)'
+        }
+      },
+      {
+        name: '',
+        type: 'line',
+        data: [],
+        smooth:true,
+        lineStyle:{
+          width: 4
+        },
+        itemStyle:{
+          color: 'skyblue',
+          shadowBlur: 5,
+          shadowColor: 'rgba(0,255,0,0.5)'
+        }
+      },
     ]
+  })
+  const res =  await chartDataApi()
+  if (res.code === 200) {
+    chartOptions.legend.data = res.data.list.map((item: any) => item.name)
+    for ( let i = 0; i < res.data.list.length; i++ ) {
+      chartOptions.series[i].name = res.data.list[i].name
+      chartOptions.series[i].data = res.data.list[i].data
+    }
+    return chartOptions
   }
+}
 
-useChart(chartRef, chartOptions)
+useChart(chartRef, setChartOptions)
 
+const chartRef2 = ref(null)
+const setChartOptions2 = async () => {
+  const chartOptions: any = reactive({
+    legend: {
+      top: 'bottom'
+    },
+    tooltip:{
+      trigger: 'item',
+      formatter:'{a}<br />{b}:{c}'
+    },
+    series: [
+      {
+        name: '营收占比',
+        type: 'pie',
+        radius: ['50%', '70%'],
+        center: ['50%', '50%'],
+        roseType: 'radius',
+        itemStyle: {
+          borderRadius: 8
+        },
+        label: {
+          show: false,
+          position:'inner'
+        },
+        emphasis:{
+          label:{
+            show:true,
+            fontSize:"16",
+            fontWeight:"bold"
+          }
+        },
+        data: [
+          { value: 35, name: '充电桩' },
+          { value: 30, name: '充电站' },
+          { value: 25, name: '充电柜' }
+        ],
+        labelLine:{
+          smooth:true,
+          length:1
+        }
+      }
+    ],
+    graphic:{
+      type:"text",
+      left:"center",
+      top:"center",
+      style:{
+        text:"营收占比",
+        fontSize:16,
+        fill:'#333'
+      }
+    }
+  })
+  const res =  await chartDataApi2()
+  chartOptions.series[0].data = res.data.list
+  return chartOptions
+
+}
+useChart(chartRef2, setChartOptions2)
 
 
 const router = useRouter()
@@ -216,11 +337,11 @@ const handleClick = (e: Event) => {
           </div>
         </template>
           <el-row>
-            <el-col :span="6">
+            <el-col :span="8">
               <div ref="chartRef2" style="width: 100%; height: 400px;">
               </div>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="16">
               <div ref="chartRef" style="width: 100%; height: 400px;">
 
               </div>

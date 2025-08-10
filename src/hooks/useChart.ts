@@ -2,14 +2,14 @@ import type { Ref } from 'vue'
 import { ref, onMounted, onUnmounted, markRaw } from 'vue'
 import * as echarts from 'echarts'
 
-export function useChart( chartRef: Ref<HTMLElement | null>, initialOptions: any){
+export function useChart( chartRef: Ref<HTMLElement | null>, setChartOptions: any){
   const chartInstance = ref<echarts.ECharts | null>(null)
-  const chartOptions = ref<any>(initialOptions)
 
-  const initChart = () => {
+  const initChart = async() => {
     if (chartRef.value) {
       chartInstance.value = markRaw(echarts.init(chartRef.value))
-      chartInstance.value.setOption(chartOptions.value)
+      const options = await setChartOptions()
+      chartInstance.value.setOption(options)
     }
   }
   const resizeChart = () => {

@@ -196,3 +196,41 @@ Mock.mock("https://www.demo.com/login","post",(options:any) => {
     }
   }
 })
+
+// echart图表接口，折线图
+Mock.mock("https://www.demo.com/chartData","get",() => {
+  return{ 
+    code: 200,
+    message:"success",
+    data:{
+      list:[
+        {
+          name:'充电量',
+          data:[20,50,30,70,60,80,40,60,50]
+        },
+        {
+          name:'充电时长',
+          data:[40,60,50,80,70,90,60,70,80]
+        },
+        {
+          name:'充电功率',
+          data:[30,40,60,50,70,20,30,40,60]
+        }
+      ]
+    }
+  }
+})
+
+Mock.mock("https://www.demo.com/chartData2","get",() => {
+  return{ 
+    code: 200,
+    message:"success",
+    data:{
+      list:[
+        { value: 35, name: '充电桩' },
+        { value: 30, name: '充电站' },
+        { value: 25, name: '充电柜' }
+      ]
+    }
+  }
+})
