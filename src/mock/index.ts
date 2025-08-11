@@ -234,3 +234,13 @@ Mock.mock("https://www.demo.com/chartData2","get",() => {
     }
   }
 })
+
+Mock.mock("https://www.demo.com/chartData3","get",() => {
+  return{ 
+    code: 200,
+    message:"success",
+    data:{
+      list:[ 42, 30, 200, 230, 221, 180 ]
+    }
+  }
+})

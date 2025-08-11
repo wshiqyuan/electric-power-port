@@ -13,7 +13,7 @@ import { CaretBottom } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/tabs'
 import { useChart } from '@/hooks/useChart'
-import { chartDataApi, chartDataApi2 } from '@/api/dashboard'
+import { chartDataApi, chartDataApi2, chartDataApi3 } from '@/api/dashboard'
 
 const chartRef = ref(null)
 
@@ -156,6 +156,42 @@ const setChartOptions2 = async () => {
 
 }
 useChart(chartRef2, setChartOptions2)
+
+const chartRef3 = ref(null)
+const setChartOptions3 = async () => {
+  const chartOptions: any = reactive({
+    radar: {
+    // shape: 'circle',
+    indicator: [
+      { name: '闲置数', max: 65 },
+      { name: '使用数', max: 160 },
+      { name: '故障数', max: 300 },
+      { name: '维修数', max: 380 },
+      { name: '更换数', max: 550 },
+      { name: '报废数', max: 240 }
+    ]
+    },
+    series: [
+      {
+        name: '设备总览',
+        type: 'radar',
+        data: [
+          {
+            value: [],
+            name: '设备总览'
+          }
+        ]
+      }
+    ]
+  })
+  const res = await chartDataApi3()
+  if (res.code === 200) {
+    chartOptions.series[0].data[0].value = res.data.list
+    return chartOptions
+  }
+} 
+useChart(chartRef3, setChartOptions3)
+
 
 
 const router = useRouter()
@@ -343,14 +379,134 @@ const handleClick = (e: Event) => {
             </el-col>
             <el-col :span="16">
               <div ref="chartRef" style="width: 100%; height: 400px;">
-
               </div>
             </el-col>
           </el-row>
       </el-card>
     </el-col>
     <el-col :span="6">
+      <el-card class="ml">
+        <template #header>
+          <div class="card-header">
+            <h1>设备总览</h1>
+          </div>
+        </template>
+        <div ref="chartRef3" style="width: 100%; height: 240px;"></div>
+      </el-card>
+      <el-card class="mt ml">
+        <template #header>
+          <div class="card-header">
+            <h1>营收统计表</h1>
+          </div>
+        </template>
+          <ul class="ranking-list">
+            <li class="ranking-item">
+              <span class="rank" style="background-color: rgb(103, 194, 58); color: #f4f3f3;">1</span>
+              <span class="store-name">广州</span>
+              <span class="sales">512,457</span>
+              <span style="margin-left: 50px;">
+                24
+                <el-icon class="green">
+                  <CaretTop />
+                </el-icon>
+              </span>
+            </li>
+            <li class="ranking-item">
+              <span class="rank" style="background-color: rgb(15,131,218); color: #f4f3f3;">2</span>
+              <span class="store-name">上海</span>
+              <span class="sales">323,234</span>
+              <span style="margin-left: 50px;">
+                21
+                <el-icon class="red">
+                  <CaretBottom />
+                </el-icon>
+              </span>
+            </li>
+            <li class="ranking-item">
+              <span class="rank" style="background-color: rgb(245,109, 81); color: #f4f3f3;">3</span>
+              <span class="store-name">佛山</span>
+              <span class="sales">193,255</span>
+              <span style="margin-left: 50px;">
+                37
+                <el-icon class="green">
+                  <CaretTop />
+                </el-icon>
+              </span>
+            </li>
+            <li class="ranking-item">
+              <span class="rank">4</span>
+              <span class="store-name">珠海</span>
+              <span class="sales">120,540</span>
+              <span style="margin-left: 50px;">
+                19
+                <el-icon class="green">
+                  <CaretTop />
+                </el-icon>
+              </span>
+            </li>
+            <li class="ranking-item">
+              <span class="rank">5</span>
+              <span class="store-name">深圳</span>
+              <span class="sales">66,233</span>
+              <span style="margin-left: 50px;">
+                29
+                <el-icon class="red">
+                  <CaretBottom />
+                </el-icon>
+              </span>
+            </li>
+            <li class="ranking-item">
+              <span class="rank">6</span>
+              <span class="store-name">厦门</span>
+              <span class="sales">54,335</span>
+              <span style="margin-left: 50px;">
+                31
+                <el-icon class="red">
+                  <CaretBottom />
+                </el-icon>
+              </span>
+            </li>
+            <li class="ranking-item">
+              <span class="rank">7</span>
+              <span class="store-name">长沙</span>
+              <span class="sales">33,941</span>
+              <span style="margin-left: 50px;">
+                15
+                <el-icon class="green">
+                  <CaretTop />
+                </el-icon>
+              </span>
 
+            </li>
+          </ul>
+      </el-card>
+      <el-card class="mt ml">
+        <template #header>
+          <div class="card-header">
+            <h1>故障报警</h1>
+          </div>
+        </template>
+        <el-timeline style="max-width: 600px">
+          <el-timeline-item :hollow="true" timestamp="2025/8/5" placement="top" type="danger">
+            <el-card>
+              <h4>矿业北路电路中断</h4>
+              <p>Tom committed 2025/8/5 6:31</p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item :hollow="true" timestamp="2025/6/14" placement="top" type="warning">
+            <el-card>
+              <h4>南京路14号终端故障</h4>
+              <p>Tom committed 2025/6/14 12:20</p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item :hollow="true" timestamp="2025/5/2" placement="top" type="danger">
+            <el-card>
+              <h4>中兴路6号机组断电</h4>
+              <p>Tom committed 2025/5/2 15:26</p>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+      </el-card>
     </el-col>
   </el-row>
 </template>
@@ -401,6 +557,34 @@ const handleClick = (e: Event) => {
     p{
       margin-top: 10px;
       color: #333;
+    }
+  }
+
+  .ranking-list {
+    .ranking-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      .rank{
+        display: inline-block;
+        font-weight: 700;
+        color: #666;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 25px;
+      }
+      .store-name{
+        flex-grow: 1;
+        padding: 0 10px;
+      }
+      .sales{
+        color:#666;
+      }
+    }
+    .ranking-item:nth-child(even){
+      background-color: rgb(253, 246, 236);
     }
   }
 
