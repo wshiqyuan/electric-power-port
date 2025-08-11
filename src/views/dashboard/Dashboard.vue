@@ -8,12 +8,22 @@ import remain from '@/assets/remain.png'
 import total from '@/assets/total.png'
 import money from '@/assets/money.png'
 import daily from '@/assets/daily.png'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { CaretBottom } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/tabs'
 import { useChart } from '@/hooks/useChart'
 import { chartDataApi, chartDataApi2, chartDataApi3 } from '@/api/dashboard'
+
+const updateTime = ref('')
+onMounted(() => {
+  updateTime.value = new Date().toLocaleString()
+})
+
+const refreshClick = () => {
+  updateTime.value = new Date().toLocaleString()
+}
+
 
 const chartRef = ref(null)
 
@@ -221,8 +231,8 @@ const handleClick = (e: Event) => {
       <el-card>
         <div class="title">
           <h3 class="mr">今日设备运行状态</h3>
-          <p>更新时间：2023-08-01 10:00</p>
-          <el-icon color="#86909c" style="margin-left: 5px; padding-bottom: 4px;">
+          <p>更新时间：{{ updateTime }}</p>
+          <el-icon class="refresh-icon" @click="refreshClick" color="#86909c" style="margin-left: 5px; padding-bottom: 4px;">
             <Refresh />
           </el-icon>
         </div>
@@ -534,6 +544,10 @@ const handleClick = (e: Event) => {
         cursor: pointer;
       }
     }
+  }
+
+  .refresh-icon:hover {
+    cursor: pointer;
   }
 
   .equipment {

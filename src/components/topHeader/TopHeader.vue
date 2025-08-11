@@ -3,6 +3,9 @@
   import { useUserStore } from '@/store/auth'
   import { storeToRefs } from 'pinia'
   import { useRouter } from 'vue-router'
+  import { useTabsStore } from '@/store/tabs.ts'
+  const tabsStore = useTabsStore()
+  const { addTab,setCurrentTab } = tabsStore
 
   const info = ref(5)
   
@@ -43,9 +46,11 @@
   const userStore = useUserStore()
   const { username } = storeToRefs(userStore)
   
-  const handleCommand = (command: string) => {
+  const handleCommand = async (command: string) => {
     if(command === 'center'){
-      router.push("/personal")
+      await router.push("/personal")
+      addTab('个人中心', '/personal', 'User')
+      setCurrentTab('个人中心', '/personal')
     }else if(command === 'logout'){
       userStore.logout()
       router.push("/login")
@@ -98,4 +103,16 @@
     }
   }
 
+  ::v-deep .el-dropdown-menu__item:hover {
+    background-color: rgb(43,137,211) !important;
+    color: #fff !important;
+  }
+
+  .el-dropdown-link:focus-visible {
+    outline: none !important;
+  }
+
+  .el-dropdown-link:hover {
+    cursor: default;
+  }
 </style>
