@@ -500,19 +500,16 @@ const handleClick = (e: Event) => {
           <el-timeline-item :hollow="true" timestamp="2025/8/5" placement="top" type="danger">
             <el-card>
               <h4>矿业北路电路中断</h4>
-              <p>Tom committed 2025/8/5 6:31</p>
             </el-card>
           </el-timeline-item>
           <el-timeline-item :hollow="true" timestamp="2025/6/14" placement="top" type="warning">
             <el-card>
               <h4>南京路14号终端故障</h4>
-              <p>Tom committed 2025/6/14 12:20</p>
             </el-card>
           </el-timeline-item>
           <el-timeline-item :hollow="true" timestamp="2025/5/2" placement="top" type="danger">
             <el-card>
               <h4>中兴路6号机组断电</h4>
-              <p>Tom committed 2025/5/2 15:26</p>
             </el-card>
           </el-timeline-item>
         </el-timeline>

@@ -1,11 +1,22 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, onMounted } from 'vue'
+  import { listApi } from '@/api/chargingstation'
 
   const select = ref('name')
   const formParams = reactive({
     input: '',
     value: 1
   })
+
+  const loadData = async () => {
+    const { data:{ list, total } } = await listApi({ page: 1, pageSize: 10, status: 1 })
+    console.log(list, total)
+  }
+
+  onMounted(() => {
+    loadData()
+  })
+
 
 </script>
 
@@ -38,10 +49,34 @@
         </el-col>
       </el-row>
     </el-card>
+    <el-card class="mt">
+      <el-row>
+        <el-col :span="6">
+          <el-statistic title="累计充电量(度)" :value="2689003" />
+        </el-col>
+        <el-col :span="6">
+          <el-statistic title="累计充电次数(次)" :value="149775" />
+        </el-col>
+        <el-col :span="6">
+          <el-statistic title="服务区域(个)" :value="88" />
+        </el-col>
+        <el-col :span="6">
+          <el-statistic title="累计效益(元)" :value="3568900" />
+        </el-col>
+      </el-row>
+    </el-card>
+    <el-card class="mt">
+      <el-button type="primary" icon="Plus">新增充电站</el-button>
+    </el-card>
+    <el-card class="mt">
+
+    </el-card>
   </div>
 </template>
 
-<style lang="scss" scoped>
-
+<style lang="less" scoped>
+.el-col {
+  text-align: center;
+}
 
 </style>
