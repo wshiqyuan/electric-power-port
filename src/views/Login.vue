@@ -54,6 +54,7 @@
             v-model="ruleForm.username"
             placeholder="请输入用户名" 
             prefix-icon="User"
+            @keyup.enter="handleLogin"
             />
         </el-form-item>
         <el-form-item prop="password">
@@ -62,6 +63,7 @@
             placeholder="请输入密码" 
             prefix-icon="Lock"
             type="password"
+            @keyup.enter="handleLogin"
             />
         </el-form-item>
         <el-form-item>
@@ -69,7 +71,6 @@
             type="primary"
             style="width: 100%;"
             @click="handleLogin"
-            @keyup.enter="handleLogin"
             >登录</el-button>
         </el-form-item>
       </el-form>
