@@ -2,6 +2,7 @@
   import { ref, reactive, onMounted } from 'vue'
   import { listApi } from '@/api/chargingstation'
   import StationForm from './components/StationForm.vue'
+  import type { RowType } from '@/types/station'
 
   const select = ref('name')
   const formParams = reactive({
@@ -9,7 +10,7 @@
     value: 1
   })
 
-  const tableData = ref([])
+  const tableData = ref<RowType[]>([])
   
   const pageInfo = ref({
     page: 1,
@@ -140,6 +141,7 @@
       @current-change="handleCurrentChange"
       />
     </el-card>
+    <StationForm />
   </div>
 </template>
 
