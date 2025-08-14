@@ -634,7 +634,7 @@ let chargingStation = [
 ]
 // 原始的数据备份
 const originalChargingStation = JSON.parse(JSON.stringify(chargingStation))
-// 定义 API 接口
+// 定义 获取充电站数据 API 接口
 Mock.mock("https://www.demo.com/stationList", 'post', (options: any) => {
   chargingStation = originalChargingStation
   const { id, name, status, page, pageSize } = options.body ? JSON.parse(options.body) : {}
@@ -660,5 +660,27 @@ Mock.mock("https://www.demo.com/stationList", 'post', (options: any) => {
       total
     },
     
+  }
+})
+
+// 定义 新增/编辑充电站数据 API 接口
+Mock.mock("https://www.demo.com/station/edit", 'post', (options: any) => {
+  const res:any = JSON.parse(options.body)
+  console.log(res)
+  return {
+    code: 200,
+    success: true,
+    data: '操作成功',
+  }
+})
+
+// 删除接口
+Mock.mock("https://www.demo.com/station/delete", 'post', (options: any) => {
+  const res:any = JSON.parse(options.body)
+  console.log('删除接口收到参数',res)
+  return {
+    code: 200,
+    success: true,
+    data: '删除成功',
   }
 })

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted } from 'vue'
-  import { listApi } from '@/api/chargingstation'
+  import { listApi, deleteApi } from '@/api/chargingstation'
   import StationForm from './components/StationForm.vue'
   import type { RowType } from '@/types/station'
+  import { useStationStore } from '@/store/station'
+  import { ElMessage } from 'element-plus'
 
   const select = ref('name')
   const formParams = reactive({
@@ -23,10 +25,14 @@
 
   const loadData = async () => {
     loading.value = true
-    const { data:{ list, total } } = await listApi({ ...pageInfo.value, status:formParams.value, [select.value]: formParams.input })
-    loading.value = false
-    tableData.value = list
-    totalNum.value = total
+    try{
+      const { data:{ list, total } } = await listApi({ ...pageInfo.value, status:formParams.value, [select.value]: formParams.input })
+      loading.value = false
+      tableData.value = list
+      totalNum.value = total
+    }catch(error){
+      ElMessage.error('查询失败')
+    }
   }
 
   onMounted(() => {
@@ -50,6 +56,32 @@
     pageInfo.value.page = 1
     pageInfo.value.pageSize = 10
     loadData()
+  }
+
+  const visible = ref<boolean>(false)
+  const stationStore = useStationStore()
+
+  const edit = (row: RowType) => {
+    visible.value = true
+    stationStore.setRowData(row)
+  }
+
+  const handleAdd = () => {
+    stationStore.clearRowData()
+    visible.value = true
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deleteApi(id)
+      if (res.code === 200) {
+        ElMessage.success(res.data)
+        console.log(res)
+        loadData()
+      }
+    } catch (error) {
+      ElMessage.error('删除失败')
+    } 
   }
 
 </script>
@@ -100,7 +132,7 @@
       </el-row>
     </el-card>
     <el-card class="mt">
-      <el-button type="primary" icon="Plus">新增充电站</el-button>
+      <el-button type="primary" icon="Plus" @click="handleAdd">新增充电站</el-button>
     </el-card>
     <el-card class="mt">
       <el-table :data="tableData" style="width: 100%" v-loading="loading">
@@ -124,8 +156,19 @@
         <el-table-column prop="tel" label="联系电话" />
         <el-table-column label="操作" class="button" width="150">
           <template #default="scope">
-            <el-button type="primary" size="small">编辑</el-button>
-            <el-button type="danger" size="small">删除</el-button>
+            <el-button type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
+            <el-popconfirm
+              confirm-button-text="是"
+              cancel-button-text="否"
+              icon="WarningFilled"
+              icon-color="#F56C6C"
+              title="确定删除当前站点信息吗?"
+              @confirm="handleDelete(scope.row.id)"
+            >
+              <template #reference>
+                <el-button type="danger" size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -141,7 +184,8 @@
       @current-change="handleCurrentChange"
       />
     </el-card>
-    <StationForm />
+    <StationForm :dialog-visible="visible" @close:dialogVisible="visible = false" @reload="loadData" />
+
   </div>
 </template>
 
