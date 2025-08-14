@@ -684,3 +684,47 @@ Mock.mock("https://www.demo.com/station/delete", 'post', (options: any) => {
     data: '删除成功',
   }
 })
+
+
+// 营收统计数据接口
+let revenueData = [
+  {
+    dataName: '今日总收入(元)',
+    data: 439824,
+    percent: -21,
+  },
+  {
+    dataName: '本月总收入(万元)',
+    data: 2924,
+    percent: 12,
+  },
+  {
+    dataName: '会员卡储值(万元)',
+    data: 5234,
+    percent: 13,
+  },
+  {
+    dataName: '服务费总金额(元)',
+    data: 115424,
+    percent: -10,
+  },
+  {
+    dataName: '停车费总金额(元)',
+    data: 95424,
+    percent: -10,
+  },
+  {
+    dataName: '电费总金额(元)',
+    data: 228976,
+    percent: 9,
+  }
+]
+
+// 定义 营收统计数据 API 接口
+Mock.mock("https://www.demo.com/revenue/list", 'get', () => {
+  return {
+    code: 200,
+    success: true,
+    data: revenueData,
+  }
+})

@@ -109,7 +109,7 @@
             <el-option label="待维修" :value="5" />
           </el-select>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" style="display: flex; justify-content: flex-start;">
           <el-button type="primary" @click="loadData">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-col>
