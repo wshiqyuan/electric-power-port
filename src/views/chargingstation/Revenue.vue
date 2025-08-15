@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { listApi as revenueListApi } from '@/api/revenue'
-import type { RevenueList } from '@/types/revenue'
-import { ref, onMounted } from 'vue'
+import { listApi as revenueListApi, chartApi as revenueChartApi, fromApi as revenueFromApi } from '@/api/revenue'
+import type { RevenueList, RevenueForm } from '@/types/revenue'
+import { ref, onMounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { formatNumberToThousands } from '@/utils/toThousands'
+import { useChart } from '@/hooks/useChart'
 
 const listData = ref<RevenueList[]>([])
 
@@ -17,6 +18,82 @@ onMounted(async () => {
   }
 })
 
+
+const chartRef = ref(null)
+const setChartOptions = async () => {
+  const chartOptions = reactive({
+    tooltip: {
+      trigger:'axis'
+    },
+    legend: {
+      top: '4%',
+      data: []
+    },
+    xAxis: {
+      type: 'category',
+      data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+    },
+    yAxis: [
+      {
+        type:'value',
+        name: '销售',
+        position:'left'
+      },
+      {
+        type: 'value',
+        name: '访问量',
+        position:'right'
+      }
+    ],
+    series: [
+      {
+        name:'',
+        type:'bar',
+        data:[],
+        yAxisIndex: 0,
+        itemStyle:{
+          color: '#409eff'
+        }
+      },
+      {
+        name: '',
+        type: 'line',
+        data: [],
+        yAxisIndex: 1,
+        itemStyle:{
+          color: '#7B5BF1'
+        },
+        smooth: true
+      }
+    ]
+  })
+  try{
+    const res = await revenueChartApi()
+    chartOptions.legend.data = res.data.list.map((item:any) => item.name)
+    chartOptions.series[0].name = res.data.list[0].name
+    chartOptions.series[0].data = res.data.list[0].data
+    chartOptions.series[1].name = res.data.list[1].name 
+    chartOptions.series[1].data = res.data.list[1].data
+    return chartOptions
+  }catch(error: any){
+    console.log(error)
+    ElMessage.error('请求失败')
+  }
+}
+
+useChart(chartRef, setChartOptions)
+
+const formData = ref<RevenueForm[]>([])
+
+const loadData = async () => {
+    const { data:{ list, total } } = await revenueFromApi({
+      name: '',
+      page: 1,
+      pageSize: 10
+    })
+    console.log(list, total)
+}
+loadData()
 
 </script>
 
@@ -42,6 +119,16 @@ onMounted(async () => {
         </el-card>
       </el-col>
     </el-row>
+    <el-card class="mt">
+      <div ref="chartRef" class="chart" style="width: 100%; height: 300px;"></div>
+    </el-card>
+    <el-card class="mt">
+      <el-tale
+        :data="formData"
+      >
+
+      </el-tale>
+    </el-card>
   </div>
 </template>
 
