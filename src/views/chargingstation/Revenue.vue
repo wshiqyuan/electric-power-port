@@ -5,6 +5,7 @@ import { ref, onMounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { formatNumberToThousands } from '@/utils/toThousands'
 import { useChart } from '@/hooks/useChart'
+import { usePagination } from '@/hooks/usePagination'
 
 const listData = ref<RevenueList[]>([])
 
@@ -20,6 +21,8 @@ onMounted(async () => {
 
 
 const chartRef = ref(null)
+const loading = ref<boolean>(false)
+
 const setChartOptions = async () => {
   const chartOptions = reactive({
     tooltip: {
@@ -84,16 +87,29 @@ const setChartOptions = async () => {
 useChart(chartRef, setChartOptions)
 
 const formData = ref<RevenueForm[]>([])
+const name = ref<string>('')
 
 const loadData = async () => {
+  loading.value = true
+  try{
     const { data:{ list, total } } = await revenueFromApi({
-      name: '',
-      page: 1,
-      pageSize: 10
+      name: name.value,
+      ...pageInfo
     })
-    console.log(list, total)
+    setTotal(total)
+    formData.value = list
+    loading.value = false
+  }catch(error: any){
+    console.log(error)
+    ElMessage.error('请求失败')
+  }
 }
-loadData()
+const { total, pageInfo, handleSizeChange, handleCurrentChange, setTotal } = usePagination(loadData)
+
+onMounted (async () => {
+  await loadData()
+})
+
 
 </script>
 
@@ -123,11 +139,52 @@ loadData()
       <div ref="chartRef" class="chart" style="width: 100%; height: 300px;"></div>
     </el-card>
     <el-card class="mt">
-      <el-tale
+      <el-input @keyup.enter="loadData" v-model.trim="name" style="width: 500px;" placeholder="请输入站点名称">
+        <template #append>
+          <el-button type="primary" icon="Search" @click="loadData"></el-button>
+        </template>
+      </el-input>
+      <el-table
         :data="formData"
+        v-loading="loading"
       >
-
-      </el-tale>
+        <el-table-column type="index" label="序号" width="55" />
+        <el-table-column label="充电站名称" prop="name" />
+        <el-table-column label="充电站ID" prop="id" />
+        <el-table-column label="所属城市" prop="city" />
+        <el-table-column label="充电站总数(个)" prop="count" />
+        <el-table-column label="单日总收入(元)" prop="dailyIncome" sortable>
+          <template #default="scoped">
+            <span style="padding-right: 5px;">{{ scoped.row.dailyIncome }}</span>
+            <el-tag :type="scoped.row.mpercent > 0 ? 'success' : 'danger'" >
+              {{ scoped.row.percent > 0 ? '+' + scoped.row.percent : scoped.row.percent }}%
+            </el-tag>
+          </template>
+        </el-table-column>  
+        <el-table-column label="月度总收入(元)" prop="monthIncome" sortable>
+          <template #default="scoped">
+            <span style="padding-right: 5px;">{{ scoped.row.monthIncome }}</span>
+            <el-tag :type="scoped.row.mpercent > 0 ? 'success' : 'danger'" >
+              {{ scoped.row.mpercent > 0 ? '+' + scoped.row.mpercent : scoped.row.mpercent }}%
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="电费营收(元)" prop="electricity" />
+        <el-table-column label="停车费总营收(元)" prop="parkingFee" />
+        <el-table-column label="服务费总营收(元)" prop="serviceFee" />
+        <el-table-column label="会员储值金(元)" prop="member" />
+      </el-table>
+      <el-pagination
+      v-show="total > 0"
+      v-model:current-page="pageInfo.page"
+      v-model:page-size="pageInfo.pageSize"
+      :page-sizes="[10, 20, 30, 40]"
+      layout="total, sizes, prev, pager, next, jumper"
+      background
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      />
     </el-card>
   </div>
 </template>
@@ -163,6 +220,13 @@ loadData()
     border-radius: 2px;
     line-height: 20px;
   }
+}
+
+.el-pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
 
 .green {

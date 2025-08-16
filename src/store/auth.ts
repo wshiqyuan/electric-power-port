@@ -16,11 +16,11 @@ const useUserStore = defineStore('user', {
     actions:{
       async login(data: LoginParams) {
         try {
-          const { data: { token, user: { username, roles }, menulist } } = await loginApi(data);
+          const { data: { token, user: { username, roles }, menulist } } = await loginApi(data)
           this.token = token
           this.roles = roles
           this.menu = menulist
-          this.username = username;
+          this.username = username
           sessionStorage.setItem("token", token)
           sessionStorage.setItem("roles", JSON.stringify(roles))
           sessionStorage.setItem("username", username)

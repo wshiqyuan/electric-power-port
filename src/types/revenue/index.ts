@@ -12,10 +12,11 @@ interface RevenueForm {
   electricity: number,
   parkingFee: number,
   serviceFee: number,
-  month:number,
+  dailyIcome: number,
+  monthIncome: number,
   member: number,
   percent: number,
-  monthPercent: number
+  mpercent: number
 }
 
 export type{ RevenueList, RevenueForm }

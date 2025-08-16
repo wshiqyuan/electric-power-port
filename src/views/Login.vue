@@ -6,8 +6,8 @@
   import { useRouter } from 'vue-router';
   
   interface RuleForm{
-    username: string;
-    password: string;
+    username: string
+    password: string
   }
 
   const ruleForm: RuleForm = reactive({
@@ -63,6 +63,7 @@
             placeholder="请输入密码" 
             prefix-icon="Lock"
             type="password"
+            show-password
             @keyup.enter="handleLogin"
             />
         </el-form-item>
