@@ -135,7 +135,7 @@
       <el-button type="primary" icon="Plus" @click="handleAdd">新增充电站</el-button>
     </el-card>
     <el-card class="mt">
-      <el-table :data="tableData" style="width: 100%" v-loading="loading">
+      <el-table :data="tableData" style="width: 100%" v-loading="loading" empty-text="暂无数据">
         <el-table-column type="index" label="序号" width="56" />
         <el-table-column prop="name" label="站点名称" />
         <el-table-column prop="id" label="站点ID" />

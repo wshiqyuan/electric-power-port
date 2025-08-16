@@ -1224,3 +1224,819 @@ Mock.mock("https://www.demo.com/revenue/form", 'post', (option: any) => {
     }
   }
 })
+
+
+let chargingPile = [
+  {
+    id: "VXZ10001",
+    name: "北京西单充电站",
+    list: [
+      { id: "CD1001", voltage: "380v", current: "32.5A", power: "12.4KW", tem: "28°c", status: 1,
+        record:[
+          {time:"12:08:17",msg:"充电80度，消费80元"},
+          {time:"13:12:09",msg:"充电50度，消费50元"},
+          {time:"13:15:22",msg:"充电60度，消费60元"},
+          {time:"16:22:33",msg:"充电70度，消费70元"},
+          {time:"17:27:17",msg:"充电90度，消费90元"},
+          {time:"18:08:33",msg:"充电100度，消费100元"},
+        ]
+    },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "220v", current: "16A", power: "3.5KW", tem: "31°c", status: 2, percent: "70%" },// 家用慢充
+      { id: "CD1003", voltage: "480v", current: "125A", power: "60KW", tem: "35°c", status: 1 },// 直流快充桩待机
+      { id: "CD1004", voltage: "375v", current: "58A", power: "21.75KW", tem: "36°c", status: 2, percent: "70%" },// 充电中(375×58=21750W)
+      { id: "CD1005", voltage: "368v", current: "45A", power: "16.56KW", tem: "34°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "380v", current: "63A", power: "24KW", tem: "38°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "0v", current: "0A", power: "0KW", tem: "45°c", status: 6 },// 故障状态
+      { id: "CD1008", voltage: "370v", current: "52A", power: "19.24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "230v", current: "0.3A", power: "0.069KW", tem: "25°c", status: 1 },// 空闲状态
+      { id: "CD1010", voltage: "360v", current: "15A", power: "5.4KW", tem: "30°c", status: 4 },// 排队中
+      { id: "CD1011", voltage: "220v", current: "0.5A", power: "0.11KW", tem: "26°c", status: 1 },
+      { id: "CD1012", voltage: "365v", current: "12A", power: "4.38KW", tem: "29°c", status: 4 },
+      { id: "CD1013", voltage: "230v", current: "0.4A", power: "0.092KW", tem: "25°c", status: 1 },
+      { id: "CD1014", voltage: "360v", current: "10A", power: "3.6KW", tem: "28°c", status: 5 },// 被预约
+      { id: "CD1015", voltage: "225v", current: "0.35A", power: "0.079KW", tem: "26°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "55A", power: "20.9KW", tem: "37°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "52°c", status: 6 },// 故障高温
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "48°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "46°c", status: 6 },
+    ]
+  },
+  {
+    id: "VXZ10002",
+    name: "上海陆家嘴充电站",
+    list: [
+      { id: "CD1001", voltage: "375v", current: "58A", power: "21.75KW", tem: "36°c", status: 2 },// 充电中(375×58=21750W)
+      { id: "CD1002", voltage: "0v", current: "0A", power: "0KW", tem: "48°c", status: 6, percent: "70%" },// 故障状态
+      { id: "CD1003", voltage: "0v", current: "0A", power: "0KW", tem: "52°c", status: 6 },// 故障高温
+      { id: "CD1004", voltage: "360v", current: "10A", power: "3.6KW", tem: "28°c", status: 5, percent: "70%" },// 被预约
+      { id: "CD1005", voltage: "365v", current: "12A", power: "4.38KW", tem: "29°c", status: 4, percent: "70%" },// 排队中
+      { id: "CD1006", voltage: "380v", current: "63A", power: "24KW", tem: "38°c", status: 2, percent: "70%" },// 充电中(380×63=24000W)
+      { id: "CD1007", voltage: "360v", current: "15A", power: "5.4KW", tem: "30°c", status: 3 },// 连接中
+      { id: "CD1008", voltage: "370v", current: "52A", power: "19.24KW", tem: "35°c", status: 2, percent: "70%" },// 充电中
+      { id: "CD1009", voltage: "362v", current: "14A", power: "5.07KW", tem: "29°c", status: 3 },// 连接中
+      { id: "CD1010", voltage: "363v", current: "13A", power: "4.72KW", tem: "29°c", status: 4 },// 排队中
+      { id: "CD1011", voltage: "220v", current: "0.5A", power: "0.11KW", tem: "26°c", status: 1 },// 空闲状态
+      { id: "CD1012", voltage: "364v", current: "11A", power: "4.0KW", tem: "28°c", status: 4 },// 排队中
+      { id: "CD1013", voltage: "230v", current: "0.3A", power: "0.069KW", tem: "25°c", status: 1 },// 空闲状态
+      { id: "CD1014", voltage: "361v", current: "9.5A", power: "3.43KW", tem: "27°c", status: 5 },// 被预约
+    ],
+  },
+  {
+    id: "VXZ10003",
+    name: "广州花城广场充电站",
+    list: [
+      { id: "CD1001", voltage: "380v", current: "1.2A", power: "0.46kW", tem: "32°c", status: 3 },// 连接中：高电压低电流
+      { id: "CD1002", voltage: "240v", current: "45.8A", power: "11kW", tem: "42°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1003", voltage: "380v", current: "0.8A", power: "0.3kW", tem: "31°c", status: 3 },// 连接中：高电压低电流
+      { id: "CD1004", voltage: "235v", current: "46.8A", power: "11kW", tem: "40°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1005", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 1, percent: "70%" },// 空闲：无电压电流
+      { id: "CD1006", voltage: "230v", current: "47.8A", power: "11kW", tem: "43°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1007", voltage: "0v", current: "0A", power: "0kW", tem: "65°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1008", voltage: "380v", current: "1.0A", power: "0.38kW", tem: "33°c", status: 3, percent: "70%" },// 连接中：高电压低电流
+      { id: "CD1009", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1014", voltage: "0v", current: "0A", power: "0kW", tem: "29°c", status: 5 },// 被预约：无电压电流
+      { id: "CD1015", voltage: "245v", current: "44.9A", power: "11kW", tem: "41°c", status: 2 },// 充电中：正常电压电流
+      { id: "CD1016", voltage: "380v", current: "1.1A", power: "0.42kW", tem: "34°c", status: 3, percent: "70%" },// 连接中：高电压低电流
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0kW", tem: "68°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0kW", tem: "72°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0kW", tem: "63°c", status: 6 },// 故障：无电压高温度
+    ],
+  },
+  {
+    id: "VXZ10004",
+    name: "深圳大梅沙充电站",
+    list: [
+      { id: "CD1001", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1002", voltage: "235v", current: "46.8A", power: "11kW", tem: "40°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1003", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1004", voltage: "240v", current: "45.8A", power: "11kW", tem: "42°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1005", voltage: "230v", current: "47.8A", power: "11kW", tem: "43°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1006", voltage: "245v", current: "44.9A", power: "11kW", tem: "41°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1007", voltage: "380v", current: "1.0A", power: "0.38kW", tem: "33°c", status: 3 },// 连接中：高电压低电流
+      { id: "CD1008", voltage: "238v", current: "46.2A", power: "11kW", tem: "39°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1009", voltage: "0v", current: "0A", power: "0kW", tem: "26°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1010", voltage: "0v", current: "0A", power: "0kW", tem: "29°c", status: 4 },// 排队中：无电压电流
+      { id: "CD1011", voltage: "0v", current: "0A", power: "0kW", tem: "25°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1012", voltage: "0v", current: "0A", power: "0kW", tem: "30°c", status: 4 },// 排队中：无电压电流
+      { id: "CD1013", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1014", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 5 },// 被预约：无电压电流
+      { id: "CD1015", voltage: "0v", current: "0A", power: "0kW", tem: "26°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1016", voltage: "232v", current: "47.4A", power: "11kW", tem: "44°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0kW", tem: "65°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0kW", tem: "72°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0kW", tem: "68°c", status: 6 },// 故障：无电压高温度
+    ],
+  },
+  {
+    id: "VXZ10005",
+    name: "成都天府广场充电站",
+    list: [
+      { id: "CD1001", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1002", voltage: "235v", current: "46.8A", power: "11kW", tem: "40°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1003", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1004", voltage: "240v", current: "45.8A", power: "11kW", tem: "42°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1005", voltage: "230v", current: "47.8A", power: "11kW", tem: "43°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1006", voltage: "245v", current: "44.9A", power: "11kW", tem: "41°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1007", voltage: "380v", current: "1.0A", power: "0.38kW", tem: "33°c", status: 3 },// 连接中：高电压低电流
+      { id: "CD1008", voltage: "238v", current: "46.2A", power: "11kW", tem: "39°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1009", voltage: "0v", current: "0A", power: "0kW", tem: "26°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1010", voltage: "0v", current: "0A", power: "0kW", tem: "29°c", status: 4 },// 排队中：无电压电流
+      { id: "CD1011", voltage: "0v", current: "0A", power: "0kW", tem: "25°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1012", voltage: "0v", current: "0A", power: "0kW", tem: "30°c", status: 4 },// 排队中：无电压电流
+      { id: "CD1013", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1014", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 5 },// 被预约：无电压电流
+      { id: "CD1015", voltage: "0v", current: "0A", power: "0kW", tem: "26°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1016", voltage: "232v", current: "47.4A", power: "11kW", tem: "44°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0kW", tem: "65°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0kW", tem: "72°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0kW", tem: "68°c", status: 6 },// 故障：无电压高温度
+    ],
+  },
+  {
+    id: "VXZ10006",
+    name: "西安钟楼充电站",
+    list: [
+      { id: "CD1001", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1002", voltage: "235v", current: "46.8A", power: "11kW", tem: "40°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1003", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1004", voltage: "240v", current: "45.8A", power: "11kW", tem: "42°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1005", voltage: "230v", current: "47.8A", power: "11kW", tem: "43°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1006", voltage: "245v", current: "44.9A", power: "11kW", tem: "41°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1007", voltage: "380v", current: "1.0A", power: "0.38kW", tem: "33°c", status: 3 },// 连接中：高电压低电流
+      { id: "CD1008", voltage: "238v", current: "46.2A", power: "11kW", tem: "39°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1009", voltage: "0v", current: "0A", power: "0kW", tem: "26°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1010", voltage: "0v", current: "0A", power: "0kW", tem: "29°c", status: 4 },// 排队中：无电压电流
+      { id: "CD1011", voltage: "0v", current: "0A", power: "0kW", tem: "25°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1012", voltage: "0v", current: "0A", power: "0kW", tem: "30°c", status: 4 },// 排队中：无电压电流
+      { id: "CD1013", voltage: "0v", current: "0A", power: "0kW", tem: "27°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1014", voltage: "0v", current: "0A", power: "0kW", tem: "28°c", status: 5 },// 被预约：无电压电流
+      { id: "CD1015", voltage: "0v", current: "0A", power: "0kW", tem: "26°c", status: 1 },// 空闲：无电压电流
+      { id: "CD1016", voltage: "232v", current: "47.4A", power: "11kW", tem: "44°c", status: 2, percent: "70%" },// 充电中：正常电压电流
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0kW", tem: "65°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0kW", tem: "72°c", status: 6 },// 故障：无电压高温度
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0kW", tem: "68°c", status: 6 },// 故障：无电压高温度
+    ],
+  },
+  {
+    id: "VXZ10007",
+    name: "杭州西湖充电站",
+    list: [
+      { id: "CD1001", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380V", current: "50A", power: "19kW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1004", voltage: "380V", current: "45A", power: "17.1kW", tem: "34°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "380V", current: "60A", power: "$22.8kW", tem: "36°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "220V", current: "32A", power: "7.04kW", tem: "32°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "$380V", current: "$10A", power: "3.8kW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380V", current: "55A", power: "20.9kW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1010", voltage: "0V", current: "0A", power: "0kW", tem: "28°c", status: 4 },
+      { id: "CD1011", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },
+      { id: "CD1012", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1014", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 5 },
+      { id: "CD1015", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1016", voltage: "380V", current: "40A", power: "15.2kW", tem: "33°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "0V", current: "0A", power: "0kW", tem: "45°c", status: 6 },
+      { id: "CD1018", voltage: "0V", current: "0A", power: "0kW", tem: "43°c", status: 6 },
+      { id: "CD1019", voltage: "0V", current: "0A", power: "0kW", tem: "44°c", status: 6 },
+
+    ],
+  },
+  {
+    id: "VXZ10008",
+    name: "南京夫子庙充电站",
+    list: [
+      { id: "CD1001", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380V", current: "52A", power: "19.76kW", tem: "36°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1004", voltage: "380V", current: "48A", power: "18.24kW", tem: "34°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "220V", current: "30A", power: "6.6kW", tem: "32°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "380V", current: "55A", power: "20.9kW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "380V", current: "10A", power: "3.8kW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380V", current: "45A", power: "17.1kW", tem: "33°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1010", voltage: "0V", current: "0A", power: "0kW", tem: "28°c", status: 4 },
+      { id: "CD1011", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },
+      { id: "CD1012", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1014", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 5 },
+      { id: "CD1015", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1016", voltage: "380V", current: "58A", power: "22.04kW", tem: "37°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "0V", current: "0A", power: "0kW", tem: "45°c", status: 6 },
+      { id: "CD1018", voltage: "0V", current: "0A", power: "0kW", tem: "43°c", status: 6 },
+      { id: "CD1019", voltage: "0V", current: "0A", power: "0kW", tem: "44°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10009",
+    name: "天津意大利风情区充电站",
+    list: [
+      { id: "CD1001", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380V", current: "52A", power: "19.76kW", tem: "36°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1004", voltage: "380V", current: "48A", power: "18.24kW", tem: "34°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "220V", current: "30A", power: "6.6kW", tem: "32°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "380V", current: "55A", power: "20.9kW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "380V", current: "10A", power: "3.8kW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380V", current: "45A", power: "17.1kW", tem: "33°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1010", voltage: "0V", current: "0A", power: "0kW", tem: "28°c", status: 4 },
+      { id: "CD1011", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },
+      { id: "CD1012", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1014", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 5 },
+      { id: "CD1015", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1016", voltage: "380V", current: "58A", power: "22.04kW", tem: "37°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "0V", current: "0A", power: "0kW", tem: "45°c", status: 6 },
+      { id: "CD1018", voltage: "0V", current: "0A", power: "0kW", tem: "43°c", status: 6 },
+      { id: "CD1019", voltage: "0V", current: "0A", power: "0kW", tem: "44°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10010",
+    name: "青岛栈桥充电站",
+    list: [
+      { id: "CD1001", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380V", current: "42A", power: "15.96kW", tem: "33°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1004", voltage: "220V", current: "32A", power: "7.04kW", tem: "32°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "380V", current: "55A", power: "20.9kW", tem: "36°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "380V", current: "50A", power: "19kW", tem: "34°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "380V", current: "10A", power: "3.8kW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380V", current: "48A", power: "18.24kW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1010", voltage: "0V", current: "0A", power: "0kW", tem: "28°c", status: 4 },
+      { id: "CD1011", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 1 },
+      { id: "CD1012", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "0V", current: "0A", power: "0kW", tem: "25°c", status: 1 },
+      { id: "CD1014", voltage: "0V", current: "0A", power: "0kW", tem: "27°c", status: 5 },
+      { id: "CD1015", voltage: "0V", current: "0A", power: "0kW", tem: "26°c", status: 1 },
+      { id: "CD1016", voltage: "380V", current: "53A", power: "20.14kW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "0V", current: "0A", power: "0kW", tem: "45°c", status: 6 },
+      { id: "CD1018", voltage: "0V", current: "0A", power: "0kW", tem: "43°c", status: 6 },
+      { id: "CD1019", voltage: "0V", current: "0A", power: "0kW", tem: "44°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10011",
+    name: "武汉黄鹤楼充电站",
+    list: [
+      { id: "CD1001", voltage: "318v", current: "0.1A", power: "0.03KW", tem: "30°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "315v", current: "105.2A", power: "33.1KW", tem: "42°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "28°c", status: 1 },
+      { id: "CD1004", voltage: "316v", current: "98.5A", power: "31.1KW", tem: "39°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "314v", current: "112.3A", power: "35.3KW", tem: "43°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "319v", current: "86.7A", power: "27.7KW", tem: "38°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "313v", current: "0.3A", power: "0.09KW", tem: "31°c", status: 3 },
+      { id: "CD1008", voltage: "318v", current: "102.5A", power: "32.6KW", tem: "41°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "312v", current: "0.1A", power: "0.03KW", tem: "29°c", status: 1 },
+      { id: "CD1010", voltage: "315v", current: "0.2A", power: "0.06KW", tem: "27°c", status: 4 },
+      { id: "CD1011", voltage: "316v", current: "0.1A", power: "0.03KW", tem: "32°c", status: 1 },
+      { id: "CD1012", voltage: "314v", current: "0.3A", power: "0.09KW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "30°c", status: 1 },
+      { id: "CD1014", voltage: "313v", current: "0.1A", power: "0.03KW", tem: "28°c", status: 5 },
+      { id: "CD1015", voltage: "319v", current: "0.2A", power: "0.06KW", tem: "31°c", status: 1 },
+      { id: "CD1016", voltage: "315v", current: "94.8A", power: "29.9KW", tem: "40°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "280v", current: "0A", power: "0KW", tem: "58°c", status: 6 },
+      { id: "CD1018", voltage: "350v", current: "0A", power: "0KW", tem: "62°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "55°c", status: 6 },
+
+    ],
+  },
+  {
+    id: "VXZ10012",
+    name: "福州三坊七巷充电站",
+    list: [
+      { id: "CD1001", voltage: "318v", current: "0.1A", power: "0.03KW", tem: "30°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "315v", current: "105.2A", power: "33.1KW", tem: "42°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "28°c", status: 1 },
+      { id: "CD1004", voltage: "316v", current: "98.5A", power: "31.1KW", tem: "39°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "314v", current: "112.3A", power: "35.3KW", tem: "43°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "319v", current: "86.7A", power: "27.7KW", tem: "38°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "313v", current: "0.3A", power: "0.09KW", tem: "31°c", status: 3 },
+      { id: "CD1008", voltage: "318v", current: "102.5A", power: "32.6KW", tem: "41°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "312v", current: "0.1A", power: "0.03KW", tem: "29°c", status: 1 },
+      { id: "CD1010", voltage: "315v", current: "0.2A", power: "0.06KW", tem: "27°c", status: 4 },
+      { id: "CD1011", voltage: "316v", current: "0.1A", power: "0.03KW", tem: "32°c", status: 1 },
+      { id: "CD1012", voltage: "314v", current: "0.3A", power: "0.09KW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "30°c", status: 1 },
+      { id: "CD1014", voltage: "313v", current: "0.1A", power: "0.03KW", tem: "28°c", status: 5 },
+      { id: "CD1015", voltage: "319v", current: "0.2A", power: "0.06KW", tem: "31°c", status: 1 },
+      { id: "CD1016", voltage: "315v", current: "94.8A", power: "29.9KW", tem: "40°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "280v", current: "0A", power: "0KW", tem: "58°c", status: 6 },
+      { id: "CD1018", voltage: "350v", current: "0A", power: "0KW", tem: "62°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "55°c", status: 6 },
+
+    ],
+  },
+  {
+    id: "VXZ10013",
+    name: "合肥包公园充电站",
+    list: [
+      { id: "CD1001", voltage: "318v", current: "0.1A", power: "0.03KW", tem: "30°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "315v", current: "105.2A", power: "33.1KW", tem: "42°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "28°c", status: 1 },
+      { id: "CD1004", voltage: "316v", current: "98.5A", power: "31.1KW", tem: "39°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "314v", current: "112.3A", power: "35.3KW", tem: "43°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "319v", current: "86.7A", power: "27.7KW", tem: "38°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "313v", current: "0.3A", power: "0.09KW", tem: "31°c", status: 3 },
+      { id: "CD1008", voltage: "318v", current: "102.5A", power: "32.6KW", tem: "41°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "312v", current: "0.1A", power: "0.03KW", tem: "29°c", status: 1 },
+      { id: "CD1010", voltage: "315v", current: "0.2A", power: "0.06KW", tem: "27°c", status: 4 },
+      { id: "CD1011", voltage: "316v", current: "0.1A", power: "0.03KW", tem: "32°c", status: 1 },
+      { id: "CD1012", voltage: "314v", current: "0.3A", power: "0.09KW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "30°c", status: 1 },
+      { id: "CD1014", voltage: "313v", current: "0.1A", power: "0.03KW", tem: "28°c", status: 5 },
+      { id: "CD1015", voltage: "319v", current: "0.2A", power: "0.06KW", tem: "31°c", status: 1 },
+      { id: "CD1016", voltage: "315v", current: "94.8A", power: "29.9KW", tem: "40°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "280v", current: "0A", power: "0KW", tem: "58°c", status: 6 },
+      { id: "CD1018", voltage: "350v", current: "0A", power: "0KW", tem: "62°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "55°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10014",
+    name: "重庆解放碑充电站",
+    list: [
+      { id: "CD1001", voltage: "319v", current: "0.2A", power: "0.06KW", tem: "31°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "318v", current: "108.5A", power: "34.5KW", tem: "44°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "316v", current: "0.1A", power: "0.03KW", tem: "29°c", status: 1 },
+      { id: "CD1004", voltage: "317v", current: "96.8A", power: "30.7KW", tem: "40°c", status: 2, percent: "70%" },
+      { id: "CD1005", voltage: "315v", current: "110.3A", power: "34.7KW", tem: "45°c", status: 2, percent: "70%" },
+      { id: "CD1006", voltage: "314v", current: "92.4A", power: "29.0KW", tem: "39°c", status: 2, percent: "70%" },
+      { id: "CD1007", voltage: "313v", current: "0.3A", power: "0.09KW", tem: "32°c", status: 3 },
+      { id: "CD1008", voltage: "319v", current: "99.2A", power: "31.6KW", tem: "41°c", status: 2, percent: "70%" },
+      { id: "CD1009", voltage: "312v", current: "0.2A", power: "0.06KW", tem: "28°c", status: 1 },
+      { id: "CD1010", voltage: "316v", current: "0.1A", power: "0.03KW", tem: "27°c", status: 4 },
+      { id: "CD1011", voltage: "318v", current: "0.2A", power: "0.06KW", tem: "30°c", status: 1 },
+      { id: "CD1012", voltage: "315v", current: "0.1A", power: "0.03KW", tem: "26°c", status: 4 },
+      { id: "CD1013", voltage: "317v", current: "0.2A", power: "0.06KW", tem: "29°c", status: 1 },
+      { id: "CD1014", voltage: "313v", current: "0.1A", power: "0.03KW", tem: "28°c", status: 5 },
+      { id: "CD1015", voltage: "319v", current: "0.2A", power: "0.06KW", tem: "31°c", status: 1 },
+      { id: "CD1016", voltage: "316v", current: "102.5A", power: "32.4KW", tem: "43°c", status: 2, percent: "70%" },
+      { id: "CD1017", voltage: "290v", current: "0A", power: "0KW", tem: "59°c", status: 6 },
+      { id: "CD1018", voltage: "340v", current: "0A", power: "0KW", tem: "63°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "56°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10015",
+    name: "桂林漓江充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10016",
+    name: "苏州园区充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10017",
+    name: "昆明滇池充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10018",
+    name: "南宁青秀山充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10019",
+    name: "长沙橘子洲头充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10020",
+    name: "哈尔滨中央大街充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10021",
+    name: "石家庄正定古城充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10022",
+    name: "兰州黄河桥充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10023",
+    name: "济南大明湖充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10024",
+    name: "沈阳故宫充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10025",
+    name: "福州西湖充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10026",
+    name: "无锡灵山大佛充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10027",
+    name: "郑州二七广场充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10028",
+    name: "大连星海广场充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10029",
+    name: "宁波天一广场充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10030",
+    name: "贵阳甲秀楼充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10031",
+    name: "珠海长隆海洋王国充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+  {
+    id: "VXZ10032",
+    name: "天津滨海新区充电站",
+    list: [
+      { id: "CD1001", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 1 },//1空闲 2充电中 3连接中 4排队中 5被预约 6故障/离线
+      { id: "CD1002", voltage: "380v", current: "63A", power: "24KW", tem: "35°c", status: 2, percent: "70%" },
+      { id: "CD1003", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1004", voltage: "380v", current: "80A", power: "30KW", tem: "38°c", status: 2, percent: "45%" },
+      { id: "CD1005", voltage: "380v", current: "42A", power: "16KW", tem: "33°c", status: 2, percent: "85%" },
+      { id: "CD1006", voltage: "380v", current: "95A", power: "36KW", tem: "40°c", status: 2, percent: "20%" },
+      { id: "CD1007", voltage: "380v", current: "0.5A", power: "0.2KW", tem: "30°c", status: 3 },
+      { id: "CD1008", voltage: "380v", current: "55A", power: "21KW", tem: "34°c", status: 2, percent: "60%" },
+      { id: "CD1009", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 1 },
+      { id: "CD1010", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 4 },
+      { id: "CD1011", voltage: "220v", current: "0A", power: "0KW", tem: "25°c", status: 1 },
+      { id: "CD1012", voltage: "220v", current: "0A", power: "0KW", tem: "28°c", status: 4 },
+      { id: "CD1013", voltage: "220v", current: "0A", power: "0KW", tem: "27°c", status: 1 },
+      { id: "CD1014", voltage: "220v", current: "0A", power: "0KW", tem: "26°c", status: 5 },
+      { id: "CD1015", voltage: "220v", current: "0A", power: "0KW", tem: "29°c", status: 1 },
+      { id: "CD1016", voltage: "380v", current: "72A", power: "27KW", tem: "36°c", status: 2, percent: "50%" },
+      { id: "CD1017", voltage: "0v", current: "0A", power: "0KW", tem: "21°c", status: 6 },
+      { id: "CD1018", voltage: "0v", current: "0A", power: "0KW", tem: "22°c", status: 6 },
+      { id: "CD1019", voltage: "0v", current: "0A", power: "0KW", tem: "26°c", status: 6 },
+    ],
+  },
+
+]
+
+Mock.mock("https://www.demo.com/manage/chargingStation", 'post', () => {
+  return {
+    code: 200,
+    success: true,
+    data: chargingPile
+  }
+})
