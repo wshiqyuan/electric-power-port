@@ -2251,3 +2251,37 @@ Mock.mock("https://www.demo.com/mapform", "post", (params: any) => {
     data: params
   }
 })
+
+// 订单管理接口
+Mock.mock("https://www.demo.com/orderList", "post", (options: any) => {
+  const { pageSize } = JSON.parse(options.body);
+  console.log("后端订单管理接到参数", JSON.parse(options.body))
+  return {
+    code: 200,
+    success: true,
+    data: Mock.mock({
+      [`list|${pageSize}`]: [{
+        'orderNo': '@string("number", 6)',
+        'date': '@date("yyyy-MM-dd")',
+        'startTime|1': ['06:41:20', '08:15:50', '10:21:16', '12:47:22', '02:31:11', '04:09:56'],
+        'endTime|1': ['14:01:02', '16:12:03', '18:24:16', '20:45:30', '22:23:51'],
+        'equipmentNo|1': ['B109','C227','C106','D158','E101', 'F234'],
+        'money|25-78': 25,
+        'pay|1': ['支付宝','微信','银行卡'],
+        'status|1': [2, 3, 4]
+      }],
+      "total": 73
+    })
+  }
+})
+
+// 订单管理批量删除接口
+Mock.mock("https://www.demo.com/orderDelete", "post", (options: any) => {
+  const { order } = JSON.parse(options.body)
+  console.log('订单管理批量删除接口：', JSON.stringify(order))
+  return {
+    code: 200,
+    message: "成功",
+    data: '操作成功'
+  }
+})

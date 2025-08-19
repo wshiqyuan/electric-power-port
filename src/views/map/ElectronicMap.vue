@@ -5,15 +5,16 @@ import { ElMessage } from 'element-plus'
 import type{ FormRules, FormInstance } from 'element-plus'
 import { postStationApi } from '@/api/map'
 
-const detailData: any = {
-  stationsCount: 34,
-  provinceMost: "广州",
-  provinceCount: 22,
-  plugCount: 2031,
-  highestRevenue: "深圳大梅沙充电站",
-  lowestRevenue: "贵阳甲秀楼充电站",
-  highestFailureRate: "兰州黄河桥充电站",
-}
+const detailData: any = [
+  {id: 1, name: '累计充电站数量', context: 34},
+  {id: 2, name: '单省份最多充电桩', context: "广州"},
+  {id: 3, name: '充电站遍及省份', context: 22},
+  {id: 4, name: '暂无充电桩省份', context: 12},
+  {id: 5, name: '累计充电桩', context: 2031},
+  {id: 6, name: '单日营收最高', context: "深圳大梅沙充电站"},
+  {id: 7, name: '单日营收最低', context: "贵阳甲秀楼充电站"},
+  {id: 8, name: '故障率最高', context: "兰州黄河桥充电站"}
+]
 
 const form = reactive<any>({
   name: '',
@@ -74,14 +75,7 @@ const addStation = async() => {
       </el-col>
       <el-col :span="6">
         <el-card class="map-card">
-          <div>1.累计充电站数量：<el-text type="primary">{{ detailData.stationsCount }}个</el-text></div>
-          <div>2.单省份最多充电桩：<el-text type="primary">{{ detailData.provinceMost }}</el-text></div>
-          <div>3.充电站遍及省份：<el-text type="primary">{{ detailData.provinceCount }}个</el-text></div>
-          <div>4.暂无充电站省份：<el-text type="primary">{{ 34 - detailData.provinceCount }}个</el-text></div>
-          <div>5.累计充电桩：<el-text type="primary">{{ detailData.plugCount }}个</el-text></div>
-          <div>6.单日营收最高：<el-text type="primary">{{ detailData.highestRevenue }}</el-text></div>
-          <div>7.单日营收最低：<el-text type="primary">{{ detailData.lowestRevenue }}</el-text></div>
-          <div>8.故障率最高：<el-text type="primary">{{ detailData.highestFailureRate }}</el-text></div>
+          <div v-for="item in detailData" :key="item.id">{{ `${item.id}.${item.name}` }}：<el-text type="primary">{{ item.context }}</el-text></div>
         </el-card>
         <el-card class="mt">
           <template #header>
