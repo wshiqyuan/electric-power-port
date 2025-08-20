@@ -66,7 +66,12 @@
       </template>
     </el-tab-pane>
   </el-tabs>
-  <router-view />
+  <RouterView v-slot="{Component}">
+    <keep-alive>
+      <component :is="Component" :key="$route.name" v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <component :is="Component" :key="$route.name" v-if="!$route.meta.keepAlive" />
+  </RouterView>
 </template>
 
 <style lang="less" scoped>

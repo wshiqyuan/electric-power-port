@@ -1,8 +1,12 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { useTable } from "@/hooks/useTable"
 import { orderDeleteApi } from "@/api/operation"
 import { ElMessage } from "element-plus"
+import { useRouter, useRoute } from "vue-router"
+import { useTabsStore } from "@/store/tabs"
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 interface SearchParams {
   orderNo: string
@@ -74,6 +78,34 @@ const handleBatchDelete = async() => {
   }
 }
 
+const router = useRouter()
+const { addTab, setCurrentTab } = useTabsStore()
+const handleDetail = (orderNo: string) => {
+  addTab('订单详情', '/operations/detail', 'Share')
+  setCurrentTab('订单详情', '/operations/detail')
+  router.push("/operations/detail?orderNo=" + orderNo)
+
+}
+
+const route = useRoute()
+
+watch(() => route.name, (to, from) => {
+  if(to === 'Orders' && from !== 'Detail'){
+    loadData()
+  }
+})
+
+const exportExcel = () => {
+  // 将数据转成excel表格式
+  const ws = XLSX.utils.json_to_sheet(selectedList.value)
+  // 创建工作簿
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet')// 将工作簿加入到工作表中
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })// 创建写入格式
+  const blob = new Blob([wbout], { type: 'application/octet-stream' })// 创建blob对象
+  saveAs(blob, '订单数据.xlsx')
+}
+
 </script>
 
 <template>
@@ -116,7 +148,7 @@ const handleBatchDelete = async() => {
     </el-card>
     <el-card class="mt">
       <el-button type="danger" @click="handleBatchDelete" :disabled="!selectedList.length">批量删除</el-button>
-      <el-button icon="Download" type="primary" :disabled="!selectedList.length">导出订单数据到Excel</el-button>
+      <el-button icon="Download" @click="exportExcel" type="primary" :disabled="!selectedList.length">导出订单数据到Excel</el-button>
     </el-card>
     <el-card class="mt">
       <el-table :data="tableData" v-loading="loading" @selection-change="handleSelectionChange">
@@ -136,7 +168,7 @@ const handleBatchDelete = async() => {
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button type="primary" size="small">详情</el-button>
+            <el-button type="primary" size="small" @click="handleDetail(scope.row.orderNo)">详情</el-button>
             <el-button type="danger" size="small">删除</el-button>
           </template>
         </el-table-column>

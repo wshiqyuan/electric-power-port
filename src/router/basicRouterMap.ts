@@ -35,12 +35,15 @@ const routes:RouteRecordRaw[] = [
       {
         path:'/operations/orders',
         name:'Orders',
-        component:()=>import('@/views/operations/Orders.vue')
+        component:()=>import('@/views/operations/Orders.vue'),
+        meta:{
+          keepAlive: true
+        }
       },
       {
         path:'/operations/detail',
         name:'Detail',
-        component:()=>import('@/views/operations/Detail.vue')
+        component:()=>import('@/views/operations/Detail.vue'),
       },
       {
         path:'/operations/total',
