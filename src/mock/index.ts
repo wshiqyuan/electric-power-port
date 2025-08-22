@@ -2463,3 +2463,152 @@ Mock.mock('https://www.demo.com/totalForm', "post", (options: any) => {
     data: '操作成功'
   }
 })
+
+
+//报警管理-报警列表接口
+const alarmList = [
+  {
+    description: "充电桩插头拿不下来",
+    address: "北京市东城区",
+    equNo: "CD1001",
+    level: 1,//1严重 2紧急 3一般
+    time: "2024-09-15 09:33:24",
+    code: 10023,//故障代码
+    status: 1,//1待指派 2处理中 处理异常
+  },
+  {
+    description: "充电控制系统异常",
+    address: "上海市浦东新区",
+    equNo: "CD1002",
+    level: 2,
+    time: "2024-09-16 10:15:00",
+    code: 10024,
+    status: 2,
+  },
+  {
+    description: "充电结束未通知",
+    address: "广州市天河区",
+    equNo: "CD1003",
+    level: 3,
+    time: "2024-09-17 11:28:45",
+    code: 10025,
+    status: 1,
+  },
+  {
+    description: "设备显示屏故障",
+    address: "深圳市南山区",
+    equNo: "CD1004",
+    level: 1,
+    time: "2024-09-18 14:05:12",
+    code: 10026,
+    status: 1,
+  },
+  {
+    description: "无法启动充电",
+    address: "重庆市渝中区",
+    equNo: "CD1005",
+    level: 2,
+    time: "2024-09-19 08:43:09",
+    code: 10027,
+    status: 2,
+  },
+  {
+    description: "充电枪接触不良",
+    address: "杭州市西湖区",
+    equNo: "CD1006",
+    level: 3,
+    time: "2024-09-20 13:17:38",
+    code: 10028,
+    status: 3,
+  },
+  {
+    description: "设备漏电报警",
+    address: "成都市武侯区",
+    equNo: "CD1007",
+    level: 1,
+    time: "2024-09-21 07:26:55",
+    code: 10029,
+    status: 2,
+  },
+  {
+    description: "设备故障",
+    address: "南京市鼓楼区",
+    equNo: "CD1008",
+    level: 2,
+    time: "2024-09-22 12:34:10",
+    code: 10030,
+    status: 1,
+  },
+  {
+    description: "设备故障",
+    address: "成都市金牛区",
+    equNo: "CD1009",
+    level: 2,
+    time: "2024-09-23 15:45:20",
+    code: 10031,
+    status: 3,
+  },
+  {
+    description: "设备故障",
+    address: "温州市鹿城区",
+    equNo: "CD1010",
+    level: 2,
+    time: "2024-09-24 18:56:30",
+    code: 10032,
+    status: 2,
+  },
+  {
+    description: "设备故障",
+    address: "杭州市西湖区",
+    equNo: "CD1011",
+    level: 2,
+    time: "2024-09-25 20:12:45",
+    code: 10033,
+    status: 1,
+  },
+  {
+    description: "设备故障",
+    address: "广州市白云区",
+    equNo: "CD1012",
+    level: 2,
+    time: "2024-09-26 22:30:00",
+    code: 10034,
+    status: 3,
+  },
+  {
+    description: "设备故障",
+    address: "北京市朝阳区",
+    equNo: "CD1013",
+    level: 2,
+    time: "2024-09-27 23:45:50",
+    code: 10035,
+    status: 1,
+  },
+  {
+    description: "设备故障",
+    address: "沈阳市和平区",
+    equNo: "CD1014",
+    level: 2,
+    time: "2024-09-27 23:45:50",
+    code: 10036,
+    status: 1,
+  },
+  {
+    description: "设备故障",
+    address: "大连市中山区",
+    equNo: "CD1015",
+    level: 1,
+    time: "2024-09-27 23:45:50",
+    code: 10037,
+    status: 2,
+  },
+
+]
+
+Mock.mock('https://www.demo.com/alarmList', "get", () => {
+  return {
+    code: 200,
+    message: "操作成功",
+    data: alarmList
+  }
+})
