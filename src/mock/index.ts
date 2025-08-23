@@ -2612,3 +2612,14 @@ Mock.mock('https://www.demo.com/alarmList', "get", () => {
     data: alarmList
   }
 })
+
+// 报警任务指派接口
+Mock.mock("https://www.demo.com/assignAlarm", "post", (params: any) => {
+  const formData = JSON.parse(params.body)
+  console.log('报警任务指派接口',formData)
+  return {
+    code: 200,
+    message: "操作成功",
+    data:'报警任务指派成功'
+  }
+})
