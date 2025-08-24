@@ -8,13 +8,15 @@ import StepForm from '@/components/stepForm/StepForm.vue'
 import type{ FormInstance } from 'element-plus'
 import { assignAlarm } from '@/api/alarm'
 
-const topRadio = ref<number>(1)
+const topRadio = ref<number>(0)
 const alarmList = ref<AlarmList[]>([])
+const filterList = ref<AlarmList[]>([])
 
 onMounted( async() => {
   try {
     const { data } = await getAlarmList()
     alarmList.value = data
+    filterList.value = data
   } catch (error) {
     ElMessage.error('获取告警列表失败')
   }
@@ -32,6 +34,14 @@ const handleDrawer = (status: number, equNo: string) => {
   drawerData.value.equNo = equNo
   drawer.value = true
   tipShow.value = true
+}
+
+const handleChange = () => {
+  filterList.value = alarmList.value
+  if (topRadio.value !== 0) {
+    filterList.value = filterList.value.filter((item: any) => item.level === topRadio.value)
+  }
+
 }
 
 
@@ -139,14 +149,13 @@ const handleSubmit = async () => {
 <template>
   <div>
     <el-card>
-      <el-radio-group v-model="topRadio" size="large">
+      <el-radio-group @change="handleChange" v-model="topRadio" size="large">
         <el-radio-button label="严重告警" :value="1"></el-radio-button>
         <el-radio-button label="紧急告警" :value="2"></el-radio-button>
-        <el-radio-button label="重要告警" :value="3"></el-radio-button>
-        <el-radio-button label="一般告警" :value="4"></el-radio-button>
+        <el-radio-button label="一般告警" :value="3"></el-radio-button>
       </el-radio-group>
     </el-card>
-    <el-card class="mt" v-for="item in alarmList" :key="item.equNo">
+    <el-card class="mt" v-for="item in filterList" :key="item.equNo">
       <el-alert :title="`${item.address}充电站出现故障`" type="warning" :closable="false" show-icon />
       <el-descriptions :border="true" :column="4" direction="vertical" class="mt">
         <el-descriptions-item v-for="(val, key) in item" :key="key" :label="getLabel(key)">
@@ -159,7 +168,12 @@ const handleSubmit = async () => {
           <span v-else>{{ val }}</span>
         </el-descriptions-item>
         <el-descriptions-item label="操作">
-          <el-button @click="handleDrawer(item.status, item.equNo)" :type="item.status === 2 ? 'warning' : 'primary'">{{ item.status === 1 ? '指派' : item.status === 2 ? '催办' : '查看' }}</el-button>
+          <el-button 
+            @click="handleDrawer(item.status, item.equNo)" 
+            :type="item.status === 1 ? 'primary' : item.status === 2 ? 'warning' : 'danger'"
+          >
+            {{ item.status === 1 ? '指派' : item.status === 2 ? '催办' : '查看' }}
+          </el-button>
         </el-descriptions-item>
       </el-descriptions>
     </el-card>

@@ -173,15 +173,15 @@
         </el-table-column>
       </el-table>
       <el-pagination
-      v-show="totalNum > 0"
-      v-model:current-page="pageInfo.page"
-      v-model:page-size="pageInfo.pageSize"
-      :page-sizes="[10, 20, 30, 40]"
-      layout="total, sizes, prev, pager, next, jumper"
-      background
-      :total="totalNum"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
+        v-show="totalNum > 0"
+        v-model:current-page="pageInfo.page"
+        v-model:page-size="pageInfo.pageSize"
+        :page-sizes="[10, 20, 30, 40]"
+        layout="total, sizes, prev, pager, next, jumper"
+        background
+        :total="totalNum"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       />
     </el-card>
     <StationForm :dialog-visible="visible" @close:dialogVisible="visible = false" @reload="loadData" />

@@ -2623,3 +2623,31 @@ Mock.mock("https://www.demo.com/assignAlarm", "post", (params: any) => {
     data:'报警任务指派成功'
   }
 })
+
+
+// 会员卡管理接口
+Mock.mock('https://www.demo.com/member', 'post', (req:any) => {
+  const { page, pageSize, memberCardNumber, holderName, holderPhone } = JSON.parse(req.body);
+  console.log("会员管理接口",page, pageSize,memberCardNumber, holderName, holderPhone)
+  return {
+    "code": 200,
+    "message": "操作成功",
+    data: Mock.mock({
+      [`list|${pageSize}`]:[{
+        'memberCardNumber': '@id',  // 会员卡号
+        'cardType|1': ["普通卡", "VIP卡", "季卡"],  // 卡类型
+        'issueDate': '@date("yyyy-MM-dd")',  // 开卡日期
+        'holderName': '@cname',  // 持有人姓名
+        'holderPhone': /^1[3-9]\d{9}$/,  // 持有人电话
+        'cardBalance': '@float(100, 10000, 2, 2)',  // 卡余额
+        'transactionRecords|1-5': [{  // 消费记录
+            'transactionDate|1': ["2025-06-18","2025-08-08","2025-10-03","2025-10-15"],  // 消费日期
+            'transactionAmount': '@float(10, 500, 2, 2)',  // 消费金额
+            'transactionType|1': ["充电扣款", "服务费扣款", "停车费扣款", "其他"]  // 消费类型
+        }],
+        'validUntil': '@date("yyyy-MM-dd")'  // 有效期至
+    }],
+    total:53
+    })
+  }
+})
