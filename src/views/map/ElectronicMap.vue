@@ -118,4 +118,9 @@ const addStation = async() => {
   line-height: 35px;  
 }
 
+::v-deep .amap-copyright, ::v-deep .amap-logo {
+  display: none !important;
+  visibility: hidden !important;
+}
+
 </style>

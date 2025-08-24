@@ -2651,3 +2651,28 @@ Mock.mock('https://www.demo.com/member', 'post', (req:any) => {
     })
   }
 })
+
+
+// 招商管理分类列表接口
+Mock.mock('https://www.demo.com/business/type',"get",()=>{
+  return {
+    code:200,
+    message:"操作成功",
+    data:{
+      type:["招商类","广告类","公告类","提示类","日常类","告警类","其他"],//文章类型
+      important:["一级","二级","三级","四级"],//重要程度
+      publish:["站内信","公众号","小程序","H5","官网"]//发布渠道
+    }
+  }
+})
+
+// 招商管理提交接口
+Mock.mock('https://www.demo.com/business/submit',"post",(req:any)=>{
+  const formData = JSON.parse(req.body)
+  console.log('招商管理提交接口',formData)
+  return {
+    code:200,
+    message:"操作成功",
+    data:"提交成功"
+  }
+})
