@@ -27,13 +27,13 @@ const handleReset = () => {
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="formData.memberCardNumber" placeholder="请输入会员卡号" />
+          <el-input v-model.trim="formData.memberCardNumber" placeholder="请输入会员卡号" />
         </el-col>  
         <el-col :span="6">
-          <el-input v-model="formData.holderName" placeholder="请输入会员姓名" />
+          <el-input v-model.trim="formData.holderName" placeholder="请输入会员姓名" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="formData.holderPhone" placeholder="请输入会员电话" />
+          <el-input v-model.trim="formData.holderPhone" placeholder="请输入会员电话" />
         </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="loadData">查询</el-button>

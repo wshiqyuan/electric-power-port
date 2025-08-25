@@ -20,6 +20,7 @@ export function useTable<T>(url: string, initialParams: any) {
       })
       tableData.value = list
       totals.value = total
+      ElMessage.success('数据请求成功')
     }catch(err) {
       console.log(err)
       ElMessage.error('数据请求失败')

@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import logo from '@/assets/logo.png'
   import { reactive, ref } from 'vue'
-  import type { FormInstance, FormRules } from 'element-plus';
+  import type { FormInstance, FormRules } from 'element-plus'
   import { useUserStore } from '@/store/auth.ts'
-  import { useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router'
+  import { ElNotification } from "element-plus"
   
   interface RuleForm{
     username: string
@@ -30,11 +31,26 @@
   const userStore = useUserStore()
   const router = useRouter()
   const formRef = ref<FormInstance>()
-  const handleLogin = async () => {
+  const handleLogin = () => {
     formRef.value?.validate(async (valid: boolean) => {
       if(valid){
-        await userStore.login(ruleForm)
-        router.push("/")
+        try {
+          await userStore.login(ruleForm)
+          ElNotification.success({
+            title: '登录成功',
+            message: '登录成功',
+            duration: 1000,
+            showClose: false
+          })
+          setTimeout(() => {
+            router.push("/")
+          }, 750)
+        } catch (error: any) {
+          ElNotification.error({
+            title: '登录失败',
+            message: error.message
+          })
+        }
       }
     })
   }

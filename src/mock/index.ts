@@ -2676,3 +2676,101 @@ Mock.mock('https://www.demo.com/business/submit',"post",(req:any)=>{
     data:"提交成功"
   }
 })
+
+
+// 自定义生成随机账号函数
+Mock.Random.extend({
+  account: function() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    const length = Mock.mock('@natural(6, 10)')
+    let result = ''
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return result
+  }
+})
+// 权限设置接口
+Mock.mock('https://www.demo.com/systemList','post',(req:any)=>{
+  const {pageSize} = JSON.parse(req.body);
+  console.log("权限设置接口收到参数",JSON.parse(req.body)) 
+return {
+    code:200,
+    message:"操作成功",
+    data:Mock.mock({
+      [`list|${pageSize}`]:[{
+        'name': '@cname',  // 姓名
+        'account': '@account',//账号
+        'phone': /^1[3-9]\d{9}$/,  // 电话
+        'idNo': '@id',  // 身份证号
+        'position|1':["客服专员",'客服经理','市场专员',"市场经理","运营专员","运营经理","技术工程师","技术经理","Boss"],//职位
+        'department|1':['总裁办','技术部','市场部','维修部','运营部','客服部'],//所属部门
+        "pageAuthority|1":['admin','manager','user','自定义权限'],//页面权限
+        'btnAuthority|1':['add','delete','edit','all','自定义权限'],//按钮权限
+    }],
+    total:41
+    })
+  }
+})
+
+
+const userMenulist = [
+  {
+    name: "数据看板",
+    url: "/dashboard",
+    icon: "DataLine"
+  },
+  {
+    name: "充电站管理",
+    url: "/chargingstation",
+    icon: "Lightning",
+    children: [
+      {
+        name: "充电站监控",
+        url: "/chargingstation/monitor",
+        icon: "VideoCamera"
+      },
+
+      {
+        name: "充电桩管理",
+        url: "/chargingstation/manage",
+        icon: "Warning"
+      }
+    ]
+  },
+  {
+    name: "电子地图",
+    url: "/map",
+    icon: "MapLocation"
+  },
+
+  {
+    name: "报警管理",
+    url: "/alarm",
+    icon: "Phone"
+  },
+
+  {
+    name: "会员卡管理",
+    url: "/member",
+    icon: "Magnet"
+  },
+  {
+    name: "个人中心",
+    url: "/personal",
+    icon: "User"
+  },
+]
+//获取当前用户权限
+Mock.mock("https://www.demo.com/userAuth","post",(req:any)=>{
+ const {pageAuthority}=JSON.parse(req.body)
+  console.log("后端收到当前权限",pageAuthority)
+  return {
+    code:200,
+    message:"操作成功",
+    data:{
+      list:pageAuthority=="user"? userMenulist:(pageAuthority=="manager"?menulist2:menulist),
+      btn:pageAuthority=="user"?['add']:(pageAuthority=="manager"?['add',"edit"]:['add',"edit","all","delete"])
+    }
+  }
+})
