@@ -32,7 +32,7 @@ export function useTable<T>(url: string, initialParams: any) {
     loadData()
   })
 
-    const handleSizeChange = (val: number) => {
+  const handleSizeChange = (val: number) => {
     pageInfo.pageSize = val
     loadData()
   }

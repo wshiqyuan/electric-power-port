@@ -3,6 +3,8 @@ import { ref, defineProps, defineEmits } from 'vue'
 import { useUserStore } from '@/store/auth'
 import { storeToRefs } from 'pinia'
 import { transformMenu } from '@/utils/transformMenu'
+import { setAuthApi } from '@/api/system'
+import { ElMessage } from 'element-plus'
 
 // 页面权限组件
 const props = defineProps({
@@ -17,10 +19,14 @@ const props = defineProps({
   btnAuth: {
     type: Array,
     required: true,
+  },
+  accountNum: {
+    type: String,
+    required: true,
   }
 })
 
-const emits = defineEmits(['close'])
+const emits = defineEmits(['close', 'reload'])
 
 const userStore = useUserStore()
 const { menu } = storeToRefs(userStore)
@@ -36,12 +42,28 @@ const handleOpen = () => {
 
 const handleClose = () =>{
   emits('close')
+  emits('reload')
 }
 
 
 // 按钮权限组件
 const initBtnAuth = ref<string[]>([])
 
+
+// 提交表单
+const handleConfirm = async() => {
+  try{
+    const res = await setAuthApi(props.accountNum, treeRef.value.getCheckedKeys(true), initBtnAuth.value)
+    console.log(res)
+    if(res.code === 200){
+      ElMessage.success("权限设置成功")
+      handleClose()
+    }
+  }catch(err){
+    console.log("权限设置失败",err)
+    ElMessage.error("权限设置失败")
+  }
+}
 
 
 </script>
@@ -70,12 +92,15 @@ const initBtnAuth = ref<string[]>([])
           </div>
         </template>
         <el-checkbox-group v-model="initBtnAuth">
-          <el-checkbox label="全部" value="all" />
           <el-checkbox label="添加" value="add" />
           <el-checkbox label="编辑" value="edit" />
           <el-checkbox label="删除" value="delete" />
         </el-checkbox-group>
       </el-card>
+      <template #footer>
+        <el-button @click="$emit('close')">取消</el-button>
+        <el-button type="primary" @click="handleConfirm">确认</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>

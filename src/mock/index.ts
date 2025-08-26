@@ -2275,10 +2275,10 @@ Mock.mock("https://www.demo.com/orderList", "post", (options: any) => {
   }
 })
 
-// 订单管理批量删除接口
+// 订单管理删除接口
 Mock.mock("https://www.demo.com/orderDelete", "post", (options: any) => {
   const { order } = JSON.parse(options.body)
-  console.log('订单管理批量删除接口：', JSON.stringify(order))
+  console.log('订单管理删除接口：', JSON.stringify(order))
   return {
     code: 200,
     message: "成功",
@@ -2770,7 +2770,40 @@ Mock.mock("https://www.demo.com/userAuth","post",(req:any)=>{
     message:"操作成功",
     data:{
       list:pageAuthority=="user"? userMenulist:(pageAuthority=="manager"?menulist2:menulist),
-      btn:pageAuthority=="user"?['add']:(pageAuthority=="manager"?['add',"edit"]:['add',"edit","all","delete"])
+      btn:pageAuthority=="user"?['add']:(pageAuthority=="manager"?['add',"edit"]:['add','edit','delete'])
     }
+  }
+})
+
+//权限设置接口
+Mock.mock("https://www.demo.com/setAuth","post",(req:any)=>{
+  const {btnList,pageList,account}=JSON.parse(req.body)
+  console.log("权限设置接口修改账号权限",account,btnList,pageList)
+  return{
+    code:200,
+    message:"操作成功",
+    data:null
+  }
+})
+
+// 权限设置删除接口
+Mock.mock("https://www.demo.com/deleteAuth","post",(req:any)=>{
+  const {account}=JSON.parse(req.body)
+  console.log("权限设置删除接口",account)
+  return{
+    code:200,
+    message:"删除成功",
+    data:'success'
+  }
+})
+
+// 权限设置禁用接口
+Mock.mock("https://www.demo.com/disableAuth","post",(req:any)=>{
+  const {account}=JSON.parse(req.body)
+  console.log("权限设置禁用接口",account)
+  return{
+    code:200,
+    message:"禁用成功",
+    data:'success'
   }
 })

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useTable } from '@/hooks/useTable'
 import AuthModal from '@/views/system/AuthModal.vue'
-import { getAuthApi } from '@/api/system'
+import { getAuthApi, deleteAuthApi, disableAuthApi } from '@/api/system'
 import { ElMessage } from 'element-plus'
 import type{ MenuItem } from '@/types/user'
 
@@ -17,7 +17,7 @@ const searchParams = ref<SeachType>({
   department: ''
 })
 
-const { tableData, loading, totals, pageInfo, loadData, handleCurrentChange, handleSizeChange } = useTable('/systemList', searchParams)
+const { tableData, loading, totals, pageInfo, loadData, resetPaginstion, handleCurrentChange, handleSizeChange } = useTable('/systemList', searchParams)
 
 
 //权限分配
@@ -43,8 +43,10 @@ function collectUrls(tree: MenuItem[]){
 
 const checkedKeys = ref<string[]>([])
 const btnAuth = ref<string[]>([])
-const settingAuth = async (pageAuthority: string) => {
+const accountNum = ref<string>('')
+const settingAuth = async (pageAuthority: string, account: string) => {
   try {
+    accountNum.value = account
     const { data:{ list, btn } } = await getAuthApi(pageAuthority)
     checkedKeys.value = collectUrls(list)
     visible.value = true
@@ -55,6 +57,37 @@ const settingAuth = async (pageAuthority: string) => {
   }
 }
 
+const handleDelete = async (account: string) => {
+  try {
+    const res = await deleteAuthApi(account)
+    if(res.code === 200){
+      ElMessage.success(res.msg)
+      loadData()
+    }
+  } catch (error) {
+    ElMessage.error('删除失败')
+  }
+}
+
+const handleDisable = async (account: string) => {
+  try {
+    const res = await disableAuthApi(account)
+    if(res.code === 200){
+      ElMessage.success(res.msg)
+      loadData()
+    }
+  } catch (error) {
+    ElMessage.error('禁用失败')
+  }
+}
+
+const resetForm = () => {
+  searchParams.value = {
+    name: '',
+    department: ''
+  }
+  resetPaginstion()
+}
 
 
 </script>
@@ -79,7 +112,7 @@ const settingAuth = async (pageAuthority: string) => {
         </el-col>
         <el-col :span="8">
           <el-button type="primary" @click="loadData" >查询</el-button>
-          <el-button>重置</el-button>
+          <el-button @click="resetForm">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -108,9 +141,35 @@ const settingAuth = async (pageAuthority: string) => {
         </el-table-column>
         <el-table-column label="操作" width="280">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="settingAuth(scope.row.pageAuthority)">权限设置</el-button>
-            <el-button type="danger" size="small">删除</el-button>
-            <el-button type="warning" size="small">禁用</el-button>
+            <el-button
+              type="primary" 
+              size="small" 
+              @click="settingAuth(scope.row.pageAuthority, scope.row.account)"
+            >权限设置</el-button>
+            <el-popconfirm
+              confirm-button-text="是"
+              cancel-button-text="否"
+              icon="WarningFilled"
+              icon-color="#F56C6C"
+              title="确定删除当前账号权限吗?"
+              @confirm="handleDelete(scope.row.account)"
+            >
+              <template #reference>
+                <el-button type="danger" size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
+            <el-popconfirm
+              confirm-button-text="是"
+              cancel-button-text="否"
+              icon="WarningFilled"
+              icon-color="#F56C6C"
+              title="确定禁用当前账号吗?"
+              @confirm="handleDisable(scope.row.account)"
+            >
+              <template #reference>
+                <el-button type="warning" size="small">禁用</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -133,6 +192,8 @@ const settingAuth = async (pageAuthority: string) => {
       :checked-keys="checkedKeys"
       @close="visible = false"
       :btn-auth="btnAuth"
+      :account-num="accountNum"
+      @reload="loadData"
     />
   </div>
 </template>

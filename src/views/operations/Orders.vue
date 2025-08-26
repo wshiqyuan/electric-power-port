@@ -106,6 +106,19 @@ const exportExcel = () => {
   saveAs(blob, '订单数据.xlsx')
 }
 
+const handleDelete = async (orderNo: string) => {
+  try {
+    const res = await orderDeleteApi([orderNo])
+    if(res.code === 200){
+      ElMessage.success(res.data)
+      loadData()
+    }
+  } catch (err) {
+    ElMessage.error('删除失败')
+    console.log(err)
+  }
+}
+
 </script>
 
 <template>
@@ -169,7 +182,18 @@ const exportExcel = () => {
         <el-table-column label="操作">
           <template #default="scope">
             <el-button type="primary" size="small" @click="handleDetail(scope.row.orderNo)">详情</el-button>
-            <el-button type="danger" size="small">删除</el-button>
+            <el-popconfirm
+              confirm-button-text="是"
+              cancel-button-text="否"
+              icon="WarningFilled"
+              icon-color="#F56C6C"
+              title="确定删除当前订单吗?"
+              @confirm="handleDelete(scope.row.orderNo)"
+            >
+              <template #reference>
+                <el-button type="danger" size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
