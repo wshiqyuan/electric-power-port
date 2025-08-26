@@ -1,4 +1,45 @@
 <script lang="ts" setup>
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { orderDetailApi } from '@/api/operation'
+import { ElMessage } from 'element-plus'
+
+
+const orderNo = ref<string>('')
+const route = useRoute()
+
+const orderDetail = ref<any>({})
+
+if (route.query.orderNo) {
+  orderNo.value = route.query.orderNo as string
+}
+
+onMounted( async() => {
+  try{
+    const { data } = await orderDetailApi(orderNo.value)
+    orderDetail.value = data
+  }catch(err){
+    ElMessage.error('查询失败')
+  }
+})
+
+watch(() => route.query.orderNo, (newVal, oldVal) => {
+  if (newVal && newVal !== oldVal) {
+    orderNo.value = newVal as string
+    fetchData()
+  }
+},{immediate: false})
+
+const fetchData = async () => {
+  try {
+    const res = await orderDetailApi(orderNo.value);
+    orderDetail.value = res.data;
+  } catch (error) {
+    console.error('获取订单详情失败:', error);
+  }
+}
+
+
 
 </script>
 
@@ -7,7 +48,7 @@
     <el-card>
       <el-descriptions
         class="margin-top"
-        :title="`订单编号：${$route.query.orderNo}`"
+        :title="`订单编号：${orderDetail.orderNo}`"
         :column="3"
         border
       >
@@ -20,7 +61,7 @@
               订单编号
             </div>
           </template>
-          {{ $route.query.orderNo }}
+          {{ orderDetail.orderNo }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -31,7 +72,7 @@
               设备编号
             </div>
           </template>
-          C231
+          {{ orderDetail.equipmentNo }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -42,7 +83,7 @@
               订单日期
             </div>
           </template>
-          2025-8-21
+          {{ orderDetail.date }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -53,7 +94,7 @@
               站点名称
             </div>
           </template>
-          <el-tag size="small">北京朝阳区充电站</el-tag>
+          <el-tag size="small">{{ orderDetail.stationName }}</el-tag>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -64,7 +105,7 @@
               开始时间
             </div>
           </template>
-          08:32:43
+          {{ orderDetail.startTime }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -75,7 +116,7 @@
               结束时间
             </div>
           </template>
-          12:22:11
+          {{ orderDetail.endTime }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -86,7 +127,7 @@
               订单金额(元)
             </div>
           </template>
-          41.2
+          {{ orderDetail.money }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -97,7 +138,7 @@
               支付方式
             </div>
           </template>
-          支付宝
+          {{ orderDetail.pay }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -108,7 +149,7 @@
               所属城市
             </div>
           </template>
-          北京
+          {{ orderDetail.city }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -119,7 +160,7 @@
               充电量(度)
             </div>
           </template>
-          86
+          {{ orderDetail.electricity }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -130,7 +171,7 @@
               充电设备
             </div>
           </template>
-          充电桩(快充)
+          {{ orderDetail.equipment }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -141,7 +182,7 @@
               充电总时长(小时)
             </div>
           </template>
-          4
+          {{ orderDetail.timeCount }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -152,7 +193,7 @@
               负责人姓名
             </div>
           </template>
-          李强
+          {{ orderDetail.manager }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -163,7 +204,7 @@
               负责人电话
             </div>
           </template>
-          18734287321
+          {{ orderDetail.managerPhone }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -174,7 +215,7 @@
               维保人姓名
             </div>
           </template>
-          刘来
+          {{ orderDetail.maintenance }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -185,7 +226,7 @@
               维保人电话
             </div>
           </template>
-          13734876382
+          {{ orderDetail.maintPhone }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -196,7 +237,7 @@
               订单状态
             </div>
           </template>
-          <el-tag size="small">已完成</el-tag>
+          <el-tag size="small"  :type="orderDetail.status === 2 ? 'success' : orderDetail.status === 3 ? 'primary': 'warning'">{{ orderDetail.status === 2 ? '进行中' : orderDetail.status === 3 ? '已完成' : '异常' }}</el-tag>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -207,7 +248,7 @@
               服务费(元)
             </div>
           </template>
-          4
+          {{ orderDetail.service }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -218,7 +259,7 @@
               停车费(元)
             </div>
           </template>
-          12.2
+          {{ orderDetail.parking }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -229,7 +270,7 @@
               电费(元)
             </div>
           </template>
-          25
+          {{ orderDetail.electricity }}
         </el-descriptions-item>
         <el-descriptions-item :rowspan="2">
           <template #label>
@@ -240,7 +281,7 @@
               备注
             </div>
           </template>
-          暂无
+          {{ orderDetail.remark }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -251,7 +292,7 @@
               收费信息
             </div>
           </template>
-          电费：25元，停车费：12.2元，服务费：4元，总共：41.2元
+          电费：{{ orderDetail.electricity }}元，停车费：{{ orderDetail.parking }}元，服务费：{{ orderDetail.service }}元，总共：{{ orderDetail.money }}元
         </el-descriptions-item>
       </el-descriptions>
     </el-card>

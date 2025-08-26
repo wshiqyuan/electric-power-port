@@ -2275,6 +2275,40 @@ Mock.mock("https://www.demo.com/orderList", "post", (options: any) => {
   }
 })
 
+// 订单管理详情接口
+Mock.mock("https://www.demo.com/orderDetail", "post", (options: any) => {
+  const { order } = JSON.parse(options.body);
+  console.log("后端订单详情接到参数", JSON.parse(options.body))
+  return {
+    code: 200,
+    message: '查询成功',
+    data: Mock.mock({
+      "orderNo": order,
+      "date": '2025-08-08',
+      "stationName": '北京朝阳区充电站',
+      "city": '北京',
+      "capacity": '86',
+      "equipment|1": ['充电桩(常规)', '充电桩(快充)' ,'充电桩(超快充)'],
+      "timeCount": '4',
+      "manager": '@cname',
+      'managerPhone': /^1[3-9]\d{9}$/,
+      "maintenance": '@cname',
+      'maintPhone': /^1[3-9]\d{9}$/,      
+      "startTime|1": ['06:41:20', '08:15:50', '10:21:16', '12:47:22', '02:31:11', '04:09:56'],
+      'endTime|1': ['14:01:02', '16:12:03', '18:24:16', '20:45:30', '22:23:51'],
+      "equipmentNo|1": ['B109','C227','C106','D158','E101', 'F234'],
+      "money": 41.2,
+      "pay|1": ['支付宝','微信','银行卡'],
+      "service": 4,
+      "parking": 12.2,
+      "electricity": 25,
+      "remark": '暂无',
+      "status|1": [2, 3, 4]
+    }),
+  }
+})
+
+
 // 订单管理删除接口
 Mock.mock("https://www.demo.com/orderDelete", "post", (options: any) => {
   const { order } = JSON.parse(options.body)

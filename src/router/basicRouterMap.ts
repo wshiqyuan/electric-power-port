@@ -44,6 +44,9 @@ const routes:RouteRecordRaw[] = [
         path:'/operations/detail',
         name:'Detail',
         component:()=>import('@/views/operations/Detail.vue'),
+        meta:{
+          keepAlive: true
+        }
       },
       {
         path:'/operations/total',
@@ -65,6 +68,7 @@ const routes:RouteRecordRaw[] = [
         name:'Business',
         component:()=>import('@/views/business/Business.vue'),
         meta:{
+          keepAlive: true,
           needAuth:['admin','manager']
         }
       },
