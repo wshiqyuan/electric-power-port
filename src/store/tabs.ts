@@ -31,7 +31,8 @@ export const useTabsStore = defineStore('tabs', () => {
           currentTab.value = tabs.value[index - 1]
         }
       } else {
-        currentTab.value = {name:'', url:''}
+        setCurrentTab('数据看板', '/dashboard')
+        addTab('数据看板', '/dashboard', 'DataLine')
       }
     }
   }

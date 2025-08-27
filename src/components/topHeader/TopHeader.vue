@@ -4,6 +4,8 @@
   import { storeToRefs } from 'pinia'
   import { useRouter } from 'vue-router'
   import { useTabsStore } from '@/store/tabs.ts'
+  import avatar from '@/assets/avatar.png'
+
   const tabsStore = useTabsStore()
   const { addTab,setCurrentTab } = tabsStore
 
@@ -68,7 +70,7 @@
           <Bell />
         </el-icon>
       </el-badge>
-      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" class="ml mr"/>
+      <el-avatar :src="avatar" class="ml mr"/>
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
           {{ greeting }}，{{ username }}
@@ -113,6 +115,6 @@
   }
 
   .el-dropdown-link:hover {
-    cursor: default;
+    cursor: pointer;
   }
 </style>

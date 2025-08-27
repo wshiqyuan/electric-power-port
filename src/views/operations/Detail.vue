@@ -18,8 +18,9 @@ onMounted( async() => {
   try{
     const { data } = await orderDetailApi(orderNo.value)
     orderDetail.value = data
+    ElMessage.success('获取订单详情成功')
   }catch(err){
-    ElMessage.error('查询失败')
+    ElMessage.error('获取订单详情失败')
   }
 })
 
@@ -32,10 +33,12 @@ watch(() => route.query.orderNo, (newVal, oldVal) => {
 
 const fetchData = async () => {
   try {
-    const res = await orderDetailApi(orderNo.value);
-    orderDetail.value = res.data;
+    const res = await orderDetailApi(orderNo.value)
+    orderDetail.value = res.data
+    ElMessage.success('获取订单详情成功')
   } catch (error) {
-    console.error('获取订单详情失败:', error);
+    ElMessage.error('获取订单详情失败')
+    console.error('获取订单详情失败:', error)
   }
 }
 
