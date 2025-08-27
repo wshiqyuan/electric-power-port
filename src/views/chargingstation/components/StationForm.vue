@@ -152,7 +152,7 @@ const rules = reactive<FormRules<RowType>>({
               <el-option label="待维修" :value="5" />
             </el-select>
           </el-form-item>          
-          <el-form-item label="正在充电:" prop="now">
+          <el-form-item label="正常使用数:" prop="now">
             <el-input :disabled="disabled" v-model="ruleForm.now" />
           </el-form-item>          
           <el-form-item label="故障数:" prop="fault">

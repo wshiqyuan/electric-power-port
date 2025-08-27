@@ -5,11 +5,10 @@
   import { useRouter } from 'vue-router'
   import { useTabsStore } from '@/store/tabs.ts'
   import avatar from '@/assets/avatar.png'
+  import { useNotificationStore } from '@/store/notification'
 
   const tabsStore = useTabsStore()
   const { addTab,setCurrentTab } = tabsStore
-
-  const info = ref(5)
   
   const greeting = ref('您好')
   
@@ -58,14 +57,29 @@
       router.push("/login")
     }
   }
+  
+  // 消息通知
+  const notificationStore = useNotificationStore()
+  const { totalCount } = storeToRefs(notificationStore)
 
+  const handleClick = async () => {
+    await router.push("/personal")
+    addTab('个人中心', '/personal', 'User')
+    setCurrentTab('个人中心', '/personal')
+  }
 
 </script>
 
 <template>
   <div class="header">
     <div class="personal">
-      <el-badge :is-dot="info > 0" class="per_icon">
+      <el-badge 
+        @click="handleClick" 
+        :is-dot="true" 
+        :show-zero="false" 
+        :value="totalCount"  
+        class="per_icon"
+      >
         <el-icon>
           <Bell />
         </el-icon>
@@ -101,6 +115,7 @@
       height: 50px;
       .per_icon{
         margin-top: 5px;
+        cursor: pointer;
       }
     }
   }

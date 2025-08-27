@@ -75,9 +75,14 @@ const addStation = async() => {
       </el-col>
       <el-col :span="6">
         <el-card class="map-card">
+          <template #header>
+            <div class="card-header">
+              <h4>站点信息</h4>
+            </div>
+          </template>
           <div v-for="item in detailData" :key="item.id">{{ `${item.id}.${item.name}` }}：<el-text type="primary">{{ item.context }}</el-text></div>
         </el-card>
-        <el-card class="mt">
+        <el-card class="mt" v-permission="['admin']">
           <template #header>
             <div class="card-header">
               <h3>新增站点地图</h3>

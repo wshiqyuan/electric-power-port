@@ -51,6 +51,9 @@ const handleClose = (type: number) => {
 }
 
 // 富文本编辑器
+
+const isLoading = ref(true)
+
 const editorContent = ref('')
 const exportHTML = () => {
   const blob = new Blob([editorContent.value], {type: 'text/html'})
@@ -118,15 +121,23 @@ const handleSubmit = async() => {
       <el-button type="primary" @click="handleSubmit">提交文章至后台</el-button>
     </el-card>
     <el-card class="mt">
-      <Editor 
-        v-model="editorContent"
-        api-key="z2n62rn9h73tkweu8efkjxeq10nve7kooqysub4khgklh0ex"
-        :init="{
-          language: 'zh-CN',
-          plugins: 'lists link image table code help wordcount',
-          height: 500,
-        }"
-      />
+      <div 
+        v-loading="isLoading" 
+        element-loading-text="loading..." 
+        style="min-height: 500px;"
+        element-loading-background="rgba(255, 255, 255, 0.9)"  
+      >
+        <Editor 
+          v-model="editorContent"
+          api-key="z2n62rn9h73tkweu8efkjxeq10nve7kooqysub4khgklh0ex"
+          :init="{
+            language: 'zh-CN',
+            plugins: 'lists link image table code help wordcount',
+            height: 500,
+          }"
+          @init="isLoading = false" 
+        />
+      </div>
     </el-card>
   </div>
 </template>

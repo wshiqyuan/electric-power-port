@@ -107,11 +107,6 @@ const menulist2 = [
           name: "营收统计",
           url: "/chargingstation/revenue",
           icon: "DataAnalysis"
-        },
-        {
-          name: "充电桩管理",
-          url: "/chargingstation/manage",
-          icon: "Warning"
         }
       ]
     },

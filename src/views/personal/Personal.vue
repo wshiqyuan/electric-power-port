@@ -7,6 +7,7 @@ import StepForm from '@/components/stepForm/StepForm.vue'
 import type{ FormInstance } from 'element-plus'
 import { submitChangeInfo } from '@/api/personal'
 import { getNotice } from '@/api/personal'
+import { useNotificationStore } from '@/store/notification'
 
 
 // 个人信息
@@ -59,6 +60,8 @@ const handleSubmit = async() => {
 const noticeList = ref<any>([])
 const infoTypeList = ref<any>([])
 const noticeListCopy = ref<any>([])
+const notificationStore = useNotificationStore()
+
 
 onMounted(async () => {
   try{
@@ -66,6 +69,7 @@ onMounted(async () => {
     noticeList.value = notice
     noticeListCopy.value = noticeList.value
     infoTypeList.value = infoType
+    notificationStore.setTotalCount(notice.length)
   }catch(error){
     ElMessage.error('获取消息通知失败')
   }
@@ -82,6 +86,7 @@ const handleRead = (title: string, type: string) => {
   const infoItem = infoTypeList.value.findIndex((item: any) => item.type === type)
   if (infoTypeList.value[infoItem].count) {
     infoTypeList.value[infoItem].count--
+    notificationStore.setTotalCount(noticeListCopy.value.length)
   }
 }
 

@@ -131,7 +131,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="mt">
+    <el-card class="mt" v-permission="['admin']">
       <el-button type="primary" icon="Plus" @click="handleAdd">新增充电站</el-button>
     </el-card>
     <el-card class="mt">
@@ -166,7 +166,7 @@
               @confirm="handleDelete(scope.row.id)"
             >
               <template #reference>
-                <el-button type="danger" size="small">删除</el-button>
+                <el-button type="danger" size="small" v-permission="['admin']">删除</el-button>
               </template>
             </el-popconfirm>
           </template>
