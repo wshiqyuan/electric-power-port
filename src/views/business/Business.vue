@@ -125,7 +125,7 @@ const handleSubmit = async() => {
         v-loading="isLoading" 
         element-loading-text="loading..." 
         style="min-height: 500px;"
-        element-loading-background="rgba(255, 255, 255, 0.9)"  
+        element-loading-background="rgba(255, 255, 255, 1)"  
       >
         <Editor 
           v-model="editorContent"

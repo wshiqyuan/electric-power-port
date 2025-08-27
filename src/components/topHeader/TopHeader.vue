@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-  import { ref, onBeforeUnmount } from 'vue'
+  import { ref, onBeforeUnmount, onMounted } from 'vue'
   import { useUserStore } from '@/store/auth'
   import { storeToRefs } from 'pinia'
   import { useRouter } from 'vue-router'
   import { useTabsStore } from '@/store/tabs.ts'
   import avatar from '@/assets/avatar.png'
   import { useNotificationStore } from '@/store/notification'
+  import { getNotice } from '@/api/personal'
+  import { ElMessage } from 'element-plus'
 
   const tabsStore = useTabsStore()
   const { addTab,setCurrentTab } = tabsStore
@@ -59,6 +61,18 @@
   }
   
   // 消息通知
+  const notificationList = ref<any[]>([])
+
+  onMounted( async () => {
+    try {
+      const { data:{ notice } } = await getNotice()
+      notificationList.value = notice
+      totalCount.value = notice.length
+    } catch (error) {
+      ElMessage.error('获取通知列表失败')
+    }
+  })
+
   const notificationStore = useNotificationStore()
   const { totalCount } = storeToRefs(notificationStore)
 

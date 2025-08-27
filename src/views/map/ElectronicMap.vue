@@ -59,8 +59,6 @@ const addStation = async() => {
       }
     }
   })
-
-
 }
 
 </script>

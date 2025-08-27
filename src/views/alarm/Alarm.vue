@@ -12,13 +12,18 @@ const topRadio = ref<number>(0)
 const alarmList = ref<AlarmList[]>([])
 const filterList = ref<AlarmList[]>([])
 
+const loading = ref<boolean>(false)
+
 onMounted( async() => {
+  loading.value = true
   try {
     const { data } = await getAlarmList()
     alarmList.value = data
     filterList.value = data
+    loading.value = false
   } catch (error) {
     ElMessage.error('获取告警列表失败')
+    loading.value = false
   }
 })
 
@@ -155,28 +160,30 @@ const handleSubmit = async () => {
         <el-radio-button label="一般告警" :value="3"></el-radio-button>
       </el-radio-group>
     </el-card>
-    <el-card class="mt" v-for="item in filterList" :key="item.equNo">
-      <el-alert :title="`${item.address}充电站出现故障`" type="warning" :closable="false" show-icon />
-      <el-descriptions :border="true" :column="4" direction="vertical" class="mt">
-        <el-descriptions-item v-for="(val, key) in item" :key="key" :label="getLabel(key)">
-          <el-tag v-if="key === 'level'" :type="val === 1 ? 'danger' : val === 2 ? 'warning' : 'info'">
-            {{ val === 1 ? '严重' : val === 2 ? '紧急' : '一般' }}
-          </el-tag>
-          <el-text type="danger" v-else-if="key === 'status'">
-            {{ val === 1 ? '待指派' : val === 2 ? '处理中' : '处理异常' }}
-          </el-text>
-          <span v-else>{{ val }}</span>
-        </el-descriptions-item>
-        <el-descriptions-item label="操作">
-          <el-button 
-            @click="handleDrawer(item.status, item.equNo)" 
-            :type="item.status === 1 ? 'primary' : item.status === 2 ? 'warning' : 'danger'"
-          >
-            {{ item.status === 1 ? '指派' : item.status === 2 ? '催办' : '查看' }}
-          </el-button>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-card>
+    <div v-loading="loading">
+      <el-card class="mt" v-for="item in filterList" :key="item.equNo">
+        <el-alert :title="`${item.address}充电站出现故障`" type="warning" :closable="false" show-icon />
+        <el-descriptions :border="true" :column="4" direction="vertical" class="mt">
+          <el-descriptions-item v-for="(val, key) in item" :key="key" :label="getLabel(key)">
+            <el-tag v-if="key === 'level'" :type="val === 1 ? 'danger' : val === 2 ? 'warning' : 'info'">
+              {{ val === 1 ? '严重' : val === 2 ? '紧急' : '一般' }}
+            </el-tag>
+            <el-text type="danger" v-else-if="key === 'status'">
+              {{ val === 1 ? '待指派' : val === 2 ? '处理中' : '处理异常' }}
+            </el-text>
+            <span v-else>{{ val }}</span>
+          </el-descriptions-item>
+          <el-descriptions-item label="操作">
+            <el-button 
+              @click="handleDrawer(item.status, item.equNo)" 
+              :type="item.status === 1 ? 'primary' : item.status === 2 ? 'warning' : 'danger'"
+            >
+              {{ item.status === 1 ? '指派' : item.status === 2 ? '催办' : '查看' }}
+            </el-button>
+          </el-descriptions-item>
+        </el-descriptions>
+      </el-card>
+    </div>
     <el-drawer
       title="报警任务指派"
       v-model="drawer"

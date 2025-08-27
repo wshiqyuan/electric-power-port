@@ -62,16 +62,21 @@ const infoTypeList = ref<any>([])
 const noticeListCopy = ref<any>([])
 const notificationStore = useNotificationStore()
 
+const loading = ref(false)
+
 
 onMounted(async () => {
+  loading.value = true
   try{
     const { data:{ notice,infoType } } = await getNotice()
     noticeList.value = notice
     noticeListCopy.value = noticeList.value
     infoTypeList.value = infoType
     notificationStore.setTotalCount(notice.length)
+    loading.value = false
   }catch(error){
     ElMessage.error('获取消息通知失败')
+    loading.value = false
   }
 })
 
@@ -179,12 +184,12 @@ const handleRead = (title: string, type: string) => {
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card>
+        <el-card v-loading="loading">
           <el-badge :hidden="item.count === 0" :value="item.count" class="item mr" v-for="item in infoTypeList" :key="item.type">
             <el-button @click="handleClick(item.type)">{{ item.type }}</el-button>
           </el-badge>
         </el-card>
-        <el-card class="mt">
+        <el-card class="mt" v-loading="loading">
           <el-collapse v-show="noticeList.length > 0">
             <el-collapse-item :title="item.title" v-for="(item,index) in noticeList" :key="index">
               <div style="display: flex; justify-content: space-between;">

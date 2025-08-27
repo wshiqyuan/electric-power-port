@@ -8,6 +8,8 @@ import stationImg from '@/assets/station.jpg'
 
 const markerList = ref<any>([])
 let map: any = null
+const isLoading = ref(true)
+
 onMounted(() => {
 
   AMapLoader.load({
@@ -51,8 +53,10 @@ onMounted(() => {
         })
         map.add(marker)
       })
+      isLoading.value = false
     }).catch((err: any) => {
       ElMessage.error(err.message)
+      isLoading.value = false
     })
   })
 })
@@ -63,9 +67,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="container">
-    地图组件
-  </div>
+  <div id="container" v-loading="isLoading" element-loading-text="loading..." element-loading-background="rgba(255, 255, 255, 1)" ></div>
 </template>
 
 <style lang="less" scoped>
