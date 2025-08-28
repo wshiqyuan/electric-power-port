@@ -2240,6 +2240,8 @@ Mock.mock("https://www.demo.com/mapList", "post", () => {
 })
 
 Mock.mock("https://www.demo.com/mapform", "post", (params: any) => {
+  const data = JSON.parse(params.body);
+  console.log(data)
   return {
     code: 200,
     success: true,
@@ -2723,7 +2725,7 @@ Mock.Random.extend({
 Mock.mock('https://www.demo.com/systemList','post',(req:any)=>{
   const {pageSize} = JSON.parse(req.body);
   console.log("权限设置接口收到参数",JSON.parse(req.body)) 
-return {
+  return {
     code:200,
     message:"操作成功",
     data:Mock.mock({
@@ -2804,7 +2806,7 @@ Mock.mock("https://www.demo.com/userAuth","post",(req:any)=>{
   }
 })
 
-//权限设置接口
+//权限设置修改接口
 Mock.mock("https://www.demo.com/setAuth","post",(req:any)=>{
   const {btnList,pageList,account}=JSON.parse(req.body)
   console.log("权限设置接口修改账号权限",account,btnList,pageList)

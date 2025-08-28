@@ -29,7 +29,7 @@ const rules = reactive<FormRules<RowType>>({
     { required: true, message: '请输入所属城市', trigger: 'blur' }
   ],
   fast: [
-    { required: true, message: '请输入快充数', trigger: 'blur' }
+    { required: true, message: '请输入快充数', trigger: 'blur' } 
   ],
   slow: [
     { required: true, message: '请输入慢充数', trigger: 'blur' }
@@ -38,7 +38,7 @@ const rules = reactive<FormRules<RowType>>({
     { required: true, message: '请选择充电站状态', trigger: 'blur' }
   ],
   now: [
-    { required: true, message: '请输入正在充电', trigger: 'blur' }
+    { required: true, message: '请输入正常使用数', trigger: 'blur' }
   ],
   fault: [
     { required: true, message: '请输入故障数', trigger: 'blur' }
@@ -47,7 +47,8 @@ const rules = reactive<FormRules<RowType>>({
     { required: true, message: '请输入站点负责人', trigger: 'blur' }
   ],
   tel: [
-    { required: true, message: '请输入负责人手机号', trigger: 'blur' }
+    { required: true, message: '请输入负责人手机号', trigger: 'blur' },
+    { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
   ]
 })
 

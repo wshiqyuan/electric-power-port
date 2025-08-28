@@ -14,7 +14,7 @@ const filterList = ref<AlarmList[]>([])
 
 const loading = ref<boolean>(false)
 
-onMounted( async() => {
+const loadingData = async () => {
   loading.value = true
   try {
     const { data } = await getAlarmList()
@@ -25,6 +25,10 @@ onMounted( async() => {
     ElMessage.error('获取告警列表失败')
     loading.value = false
   }
+} 
+
+onMounted( async() => {
+  await loadingData()
 })
 
 const drawerData = ref<any>({
@@ -144,6 +148,8 @@ const handleSubmit = async () => {
         phone: '',
       }
     }
+    drawer.value = false
+    await loadingData()
   } catch (error) {
     ElMessage.error('指派失败')
   }
@@ -187,6 +193,7 @@ const handleSubmit = async () => {
     <el-drawer
       title="报警任务指派"
       v-model="drawer"
+      v-if="drawer"
     >
       <StepForm @submit="handleSubmit" :steps="steps" :FormRef1="basicFormRef" :FormRef2="approvalFormRef" :FormRef3="managerFormRef">
         <template #step-1>
@@ -211,7 +218,7 @@ const handleSubmit = async () => {
                 <el-checkbox value="1" >更换设备</el-checkbox>
                 <el-checkbox value="2">仅维修</el-checkbox>
                 <el-checkbox value="3">需拍照</el-checkbox>
-                <el-checkbox value="3">需报备</el-checkbox>
+                <el-checkbox value="4">需报备</el-checkbox>
               </el-checkbox-group>
             </el-form-item>
             <el-form-item label="备注">
@@ -260,7 +267,6 @@ const handleSubmit = async () => {
       >
         <template #extra>
           <el-button type="primary" @click="tipShow = false">我已知晓</el-button>
-
         </template>
       </el-result>
     </el-drawer>

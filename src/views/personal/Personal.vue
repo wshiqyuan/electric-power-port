@@ -14,7 +14,7 @@ import { useNotificationStore } from '@/store/notification'
 const infoList = ref<any>([])
 const dateValue = ref(new Date())
 
-onMounted(async () => {
+const loadingPersonalData = async () => {
   try{
     const { data } = await getInfo()
     infoList.value = data
@@ -22,6 +22,10 @@ onMounted(async () => {
     ElMessage.error('获取个人信息失败')
 
   }
+}
+
+onMounted(async () => {
+  await loadingPersonalData()
 })
 
 // 修改个人信息
@@ -48,6 +52,17 @@ const formData = ref({
 const handleSubmit = async() => {
   try{
     const res = await submitChangeInfo(formData.value)
+    window.location.reload()
+    formData.value = {
+      basicInfo: {
+        name: '',
+        phone: '',
+        address: ''
+      },
+      workInfo: {
+        status: '',
+      }
+    }
     if(res.code === 200){
       ElMessage.success('提交个人信息成功')
     }
