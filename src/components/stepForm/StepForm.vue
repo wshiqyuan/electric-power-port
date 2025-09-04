@@ -15,6 +15,7 @@ const nextStep =  () => {
         currentStep.value++
       }else{
         emit('submit')
+        currentStep.value = 0
       }
     }
   })

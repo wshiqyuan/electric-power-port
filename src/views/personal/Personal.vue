@@ -52,7 +52,6 @@ const formData = ref({
 const handleSubmit = async() => {
   try{
     const res = await submitChangeInfo(formData.value)
-    window.location.reload()
     formData.value = {
       basicInfo: {
         name: '',
@@ -65,6 +64,7 @@ const handleSubmit = async() => {
     }
     if(res.code === 200){
       ElMessage.success('提交个人信息成功')
+      loadingPersonalData()
     }
   }catch(error){
     ElMessage.error('提交个人信息失败')
