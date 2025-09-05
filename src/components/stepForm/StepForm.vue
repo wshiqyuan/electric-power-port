@@ -15,7 +15,9 @@ const nextStep =  () => {
         currentStep.value++
       }else{
         emit('submit')
-        currentStep.value = 0
+        setTimeout(() => {
+          currentStep.value = 0
+        }, 1000)
       }
     }
   })
