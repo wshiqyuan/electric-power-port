@@ -111,7 +111,7 @@ const resetForm = () => {
           </el-select>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" @click="loadData" >查询</el-button>
+          <el-button type="primary" :loading="loading" @click="loadData" >查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-col>
       </el-row>

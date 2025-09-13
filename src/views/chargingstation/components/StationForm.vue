@@ -89,16 +89,21 @@ const rules = reactive<FormRules<RowType>>({
 
   const formRef = ref<FormInstance | null>(null)
 
+  const updataLoading = ref<boolean>(false)
+
   const handleSubmit = () => {
     formRef.value?.validate( async (vaild:boolean) => {
       if (vaild) {
+        updataLoading.value = true
         const res = await editApi(ruleForm.value)
         if (res.code === 200) {
           ElMessage.success(res.data)
           handleCancel()
           emit('reload')
+          updataLoading.value = false
         } else {
           ElMessage.error('编辑失败')
+          updataLoading.value = false
         }
       }
     })
@@ -165,7 +170,7 @@ const rules = reactive<FormRules<RowType>>({
     <template #footer>
       <div class="dialog-footer" style="margin-bottom: 5px;">
         <el-button @click="handleCancel">取消</el-button>
-        <el-button type="primary" @click="handleSubmit">
+        <el-button type="primary" :loading="updataLoading" @click="handleSubmit">
           确认
         </el-button>
       </div>

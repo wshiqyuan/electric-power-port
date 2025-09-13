@@ -7,6 +7,7 @@ import { useRouter, useRoute } from "vue-router"
 import { useTabsStore } from "@/store/tabs"
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
+import throttle from '@/utils/throttle'
 
 interface SearchParams {
   orderNo: string
@@ -65,16 +66,21 @@ const handleSelectionChange = (selection: Order[]) => {
   selectedList.value = selection
 }
 
+const deleteLoading = ref<boolean>(false)
+
 const handleBatchDelete = async() => {
   try{
+    deleteLoading.value = true
     const res = await orderDeleteApi(selectedList.value.map((item: Order) => item.orderNo))
     if(res.code === 200){
       ElMessage.success(res.data)
       loadData()
     }
+    deleteLoading.value = false
   }catch(err){
     ElMessage.error('删除失败')
     console.log(err)
+    deleteLoading.value = false
   }
 }
 
@@ -95,16 +101,28 @@ watch(() => route.name, (to, from) => {
   }
 })
 
-const exportExcel = () => {
-  // 将数据转成excel表格式
-  const ws = XLSX.utils.json_to_sheet(selectedList.value)
-  // 创建工作簿
-  const wb = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet')// 将工作簿加入到工作表中
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })// 创建写入格式
-  const blob = new Blob([wbout], { type: 'application/octet-stream' })// 创建blob对象
-  saveAs(blob, '订单数据.xlsx')
+const exportLoading = ref<boolean>(false)
+
+const exportExcel = async() => {
+  try {
+    exportLoading.value = true
+    // 将数据转成excel表格式
+    const ws = XLSX.utils.json_to_sheet(selectedList.value)
+    // 创建工作簿
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet')// 将工作簿加入到工作表中
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })// 创建写入格式
+    const blob = new Blob([wbout], { type: 'application/octet-stream' })// 创建blob对象
+    saveAs(blob, '订单数据.xlsx')
+    await new Promise(resolve => setTimeout(resolve, 500))
+  } catch (err) {
+    ElMessage.error('导出失败')
+  } finally {
+    exportLoading.value = false
+  }
 }
+
+const throttleExport = throttle(exportExcel, 1000)
 
 const handleDelete = async (orderNo: string) => {
   try {
@@ -140,7 +158,7 @@ const handleDelete = async (orderNo: string) => {
           <el-input placeholder="设备编号" v-model.trim="searchParams.number" />
         </el-col>
         <el-col :span="6">
-          <el-button type="primary" @click="loadData">查询</el-button>
+          <el-button type="primary" :loading="loading" @click="loadData">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-col>
         <el-col :span="6" class="mt" v-model="searchParams.name">
@@ -160,8 +178,8 @@ const handleDelete = async (orderNo: string) => {
       </el-row>
     </el-card>
     <el-card class="mt">
-      <el-button type="danger" @click="handleBatchDelete" :disabled="!selectedList.length">批量删除</el-button>
-      <el-button icon="Download" @click="exportExcel" type="primary" :disabled="!selectedList.length">导出订单数据到Excel</el-button>
+      <el-button type="danger" :loading="deleteLoading" @click="handleBatchDelete" :disabled="!selectedList.length">批量删除</el-button>
+      <el-button icon="Download" :loading="exportLoading" @click="throttleExport" type="primary" :disabled="!selectedList.length">导出订单数据到Excel</el-button>
     </el-card>
     <el-card class="mt">
       <el-table :data="tableData" v-loading="loading" @selection-change="handleSelectionChange">

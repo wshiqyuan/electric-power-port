@@ -42,6 +42,7 @@ const rules = reactive<FormRules<any>>({
 })
 
 const formRef = ref<FormInstance>()
+const updataLoading = ref<boolean>(false)
 
 const addStation = async() => {
   if (!form.name || !form.region || !form.longitude || !form.latitude) {
@@ -50,12 +51,15 @@ const addStation = async() => {
   }
   formRef.value?.validate(async (valid: any) => {
     if (valid) {
+      updataLoading.value = true
       try {
         await postStationApi(form)
         ElMessage.success('新增成功')
         resetForm()
+        updataLoading.value = false
       } catch (error:any) {
         ElMessage.error(error.message)
+        updataLoading.value = false
       }
     }
   })
@@ -106,7 +110,7 @@ const addStation = async() => {
               <el-input placeholder="请输入备注" type="textarea" v-model.trim="form.remark"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="addStation">创建</el-button>
+              <el-button type="primary" :loading="updataLoading" @click="addStation">创建</el-button>
               <el-button @click="resetForm">重置</el-button>
             </el-form-item>
           </el-form>

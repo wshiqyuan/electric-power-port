@@ -79,16 +79,23 @@ const addTimeSlot = () => {
   ruleForm.value.date.push({begin: '', end: '', electricity: ''})
 }
 
+const updataLoading = ref<boolean>(false)
+
 const submitForm = async () => {
   ruleFormRef.value?.validate(async (valid) => {
     if (valid) {
+      updataLoading.value = true
       try {
         const res = await totalFormApi({...ruleForm.value, name: title.value})
         if (res.code === 200) {
           ElMessage.success('操作成功')
+          updataLoading.value = false
+          resetForm()
+          title.value = ''
         }
       } catch (error) {
         ElMessage.error('操作失败')
+        updataLoading.value = false
       }
     }
   })
@@ -190,7 +197,7 @@ const handleNodeClick = (data: Tree) => {
               <el-input type="textarea" v-model.trim="ruleForm.remarks" :disabled="!title" />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm" :disabled="!title">创建</el-button>
+              <el-button type="primary" @click="submitForm" :loading="updataLoading" :disabled="!title">创建</el-button>
               <el-button type="danger" @click="resetForm" :disabled="!title">重置</el-button>
             </el-form-item>
           </el-form>

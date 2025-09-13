@@ -51,12 +51,19 @@ const initBtnAuth = ref<string[]>([])
 
 
 // 提交表单
+
+
+const updataLoading = ref<boolean>(false)
+
 const handleConfirm = async() => {
   try{
+    updataLoading.value = true
     const res = await setAuthApi(props.accountNum, treeRef.value.getCheckedKeys(true), initBtnAuth.value)
     console.log(res)
+    updataLoading.value = false
     if(res.code === 200){
       ElMessage.success("权限设置成功")
+      updataLoading.value = false
       handleClose()
     }
   }catch(err){
@@ -99,7 +106,7 @@ const handleConfirm = async() => {
       </el-card>
       <template #footer>
         <el-button @click="$emit('close')">取消</el-button>
-        <el-button type="primary" @click="handleConfirm">确认</el-button>
+        <el-button type="primary" :loading="updataLoading" @click="handleConfirm">确认</el-button>
       </template>
     </el-dialog>
   </div>

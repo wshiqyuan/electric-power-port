@@ -2,7 +2,7 @@
 import { ref, defineEmits } from 'vue'
 
 const currentStep = ref<number>(0)
-const props = defineProps(["steps","FormRef1","FormRef2","FormRef3"])
+const props = defineProps(["submitLoading","steps","FormRef1","FormRef2","FormRef3"])
 
 const emit = defineEmits(['submit'])
 
@@ -15,9 +15,7 @@ const nextStep =  () => {
         currentStep.value++
       }else{
         emit('submit')
-        setTimeout(() => {
-          currentStep.value = 0
-        }, 1000)
+        currentStep.value = 0
       }
     }
   })
@@ -45,7 +43,7 @@ const nextStep =  () => {
     </div>
     <div class="step-buttons mt">
       <el-button v-if="currentStep > 0" @click="currentStep--">上一步</el-button>
-      <el-button @click="nextStep" type="primary">
+      <el-button :loading="submitLoading" @click="nextStep" type="primary">
         {{ currentStep === steps.length - 1 ? '提交' : '下一步' }}
       </el-button>
     </div>

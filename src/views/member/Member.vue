@@ -36,7 +36,7 @@ const handleReset = () => {
           <el-input v-model.trim="formData.holderPhone" placeholder="请输入会员电话" />
         </el-col>
         <el-col :span="6">
-          <el-button type="primary" @click="loadData">查询</el-button>
+          <el-button type="primary" :loading="loading" @click="loadData">查询</el-button>
           <el-button @click="handleReset">重置</el-button>
         </el-col>
       </el-row>

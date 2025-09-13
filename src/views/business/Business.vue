@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { typeListApi, submitApi } from '@/api/business'
 import { ElMessage } from 'element-plus'
 import Editor from '@tinymce/tinymce-vue'
+import throttle from '@/utils/throttle'
 
 interface ListType {
   type: string[],
@@ -54,30 +55,48 @@ const handleClose = (type: number) => {
 
 const isLoading = ref(true)
 
+const exportLoading = ref(false)
+
 const editorContent = ref('')
-const exportHTML = () => {
-  const blob = new Blob([editorContent.value], {type: 'text/html'})
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = `document_${selectArry.value.map((item: selectType) => item.name).join('--')}.html`
-  link.click()
-  URL.revokeObjectURL(link.href)
+const exportHTML = async () => {
+  try{
+    exportLoading.value = true
+    const blob = new Blob([editorContent.value], {type: 'text/html'})
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = `document_${selectArry.value.map((item: selectType) => item.name).join('--')}.html`
+    link.click()
+    URL.revokeObjectURL(link.href)
+    await new Promise(resolve => setTimeout(resolve, 500))
+  }catch (error: any) {
+    ElMessage.error(error?.message)
+    console.log(error)
+  }finally {
+    exportLoading.value = false
+  }
 }
+
+const throttleExportHTML = throttle(exportHTML, 500)
 
 const submitForm = ref<any>({
   type: [],
   context: ''
 })
 
+const updataLoading = ref<boolean>(false)
+
 const handleSubmit = async() => {
   submitForm.value.type = selectArry.value.map((item: selectType) => item.name)
   submitForm.value.context = editorContent.value
+  updataLoading.value = true
   try {
     const { data } = await submitApi(submitForm.value)
     ElMessage.success(data)
+    updataLoading.value = false
   }catch (error: any) {
     ElMessage.error(error?.message)
     console.log(error)
+    updataLoading.value = false
   }
 }
 
@@ -117,8 +136,8 @@ const handleSubmit = async() => {
       </div>
     </el-card>
     <el-card class="mt">
-      <el-button type="primary" @click="exportHTML" class="mr">导出编辑器内容到HTML文件</el-button>
-      <el-button type="primary" @click="handleSubmit">提交文章至后台</el-button>
+      <el-button type="primary" :loading="exportLoading" @click="throttleExportHTML" class="mr">导出编辑器内容到HTML文件</el-button>
+      <el-button type="primary" :loading="updataLoading" @click="handleSubmit">提交文章至后台</el-button>
     </el-card>
     <el-card class="mt">
       <div 

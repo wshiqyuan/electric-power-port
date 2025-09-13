@@ -27,6 +27,8 @@
       { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[#$_&^@]).{8,16}$/, message: '密码必须包含字母、数字和特殊符号(#$_&^@)' }
     ]
   })
+  
+  const isloading = ref<boolean>(false)
 
   const userStore = useUserStore()
   const router = useRouter()
@@ -35,6 +37,7 @@
     formRef.value?.validate(async (valid: boolean) => {
       if(valid){
         try {
+          isloading.value = true
           await userStore.login(ruleForm)
           ElNotification.success({
             title: '登录成功',
@@ -43,9 +46,11 @@
             showClose: false
           })
           setTimeout(() => {
+            isloading.value = false
             router.push("/")
           }, 750)
         } catch (error: any) {
+          isloading.value = false
           ElNotification.error({
             title: '登录失败',
             message: error.message
@@ -88,6 +93,7 @@
             type="primary"
             style="width: 100%;"
             @click="handleLogin"
+            :loading="isloading"
             >登录</el-button>
         </el-form-item>
       </el-form>

@@ -23,15 +23,21 @@
 
   const totalNum = ref<number>(0)
 
+  const searchLoading = ref<boolean>(false)
+
   const loadData = async () => {
+    searchLoading.value = true
     loading.value = true
     try{
       const { data:{ list, total } } = await listApi({ ...pageInfo.value, status:formParams.value, [select.value]: formParams.input })
       loading.value = false
+      searchLoading.value = false
       tableData.value = list
       totalNum.value = total
     }catch(error){
       ElMessage.error('查询失败')
+      searchLoading.value = false
+      loading.value = false
     }
   }
 
@@ -110,7 +116,7 @@
           </el-select>
         </el-col>
         <el-col :span="6" style="display: flex; justify-content: flex-start;">
-          <el-button type="primary" @click="loadData">查询</el-button>
+          <el-button :loading="searchLoading" type="primary" @click="loadData">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-col>
       </el-row>

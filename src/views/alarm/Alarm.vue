@@ -124,9 +124,11 @@ const managerInfoRules = {
 }
 
 const managerFormRef = ref<FormInstance>()
+const submitLoading = ref<boolean>(false)
 
 const handleSubmit = async () => {
   try {
+    submitLoading.value = true
     const { data } = await assignAlarm(formData.value)
     ElMessage.success(data)
     formData.value = {
@@ -150,8 +152,10 @@ const handleSubmit = async () => {
     }
     drawer.value = false
     await loadingData()
+    submitLoading.value = false
   } catch (error) {
     ElMessage.error('指派失败')
+    submitLoading.value = false
   }
 }
 
@@ -195,7 +199,7 @@ const handleSubmit = async () => {
       v-model="drawer"
       v-if="drawer"
     >
-      <StepForm @submit="handleSubmit" :steps="steps" :FormRef1="basicFormRef" :FormRef2="approvalFormRef" :FormRef3="managerFormRef">
+      <StepForm @submit="handleSubmit" :submitLoading="submitLoading" :steps="steps" :FormRef1="basicFormRef" :FormRef2="approvalFormRef" :FormRef3="managerFormRef">
         <template #step-1>
           <el-form :model="formData.basicInfo" :rules="basicInfoRules" ref="basicFormRef">
             <el-form-item label="姓名" prop="name">
