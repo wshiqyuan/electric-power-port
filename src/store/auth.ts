@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { loginApi } from '@/api/user'
+import { ElNotification } from 'element-plus'
 
 interface LoginParams {
   username:string,
@@ -16,17 +17,31 @@ const useUserStore = defineStore('user', {
     actions:{
       async login(data: LoginParams) {
         try {
-          const { data: { token, user: { username, roles }, menulist } } = await loginApi(data)
-          this.token = token
-          this.roles = roles
-          this.menu = menulist
-          this.username = username
-          sessionStorage.setItem("token", token)
-          sessionStorage.setItem("roles", JSON.stringify(roles))
-          sessionStorage.setItem("username", username)
-          sessionStorage.setItem("menu", JSON.stringify(menulist))
+          const { code, data: { token, user: { username, roles }, menulist } } = await loginApi(data)
+          if(code === 200){
+            this.token = token
+            this.roles = roles
+            this.menu = menulist
+            this.username = username
+            sessionStorage.setItem("token", token)
+            sessionStorage.setItem("roles", JSON.stringify(roles))
+            sessionStorage.setItem("username", username)
+            sessionStorage.setItem("menu", JSON.stringify(menulist))
+            ElNotification.success({
+              title: '登录成功',
+              message: '登录成功',
+              duration: 1000,
+              showClose: false
+            })
+          } else {
+            ElNotification.error({
+              title: '登录失败'
+            })
+          }
         } catch (error) {
-      
+          ElNotification.error({
+            title: '登录失败'
+          })
         }
 
       },

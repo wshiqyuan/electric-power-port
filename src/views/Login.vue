@@ -39,12 +39,6 @@
         try {
           isloading.value = true
           await userStore.login(ruleForm)
-          ElNotification.success({
-            title: '登录成功',
-            message: '登录成功',
-            duration: 1000,
-            showClose: false
-          })
           setTimeout(() => {
             isloading.value = false
             router.push("/")
