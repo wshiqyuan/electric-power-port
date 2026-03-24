@@ -16,11 +16,11 @@ onMounted(() => {
     key: '42c9576f2de73ce6f54b561db7451ffb',
     version: '1.4.15',
     plugins: ['AMap.Scale'],
-  }) .then((AMap) => {
+  }).then((AMap) => {
     map = new AMap.Map("container", {
       viewMode: "3D",
-      zoom: 5, 
-      center: [120.155104, 30.287458], 
+      zoom: 5,
+      center: [120.155104, 30.287458],
     })
 
     getMapListApi().then(({ data }) => {
@@ -67,14 +67,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="container" v-loading="isLoading" element-loading-text="loading..." element-loading-background="rgba(255, 255, 255, 1)" ></div>
+  <div id="container" v-loading="isLoading" element-loading-text="loading..."
+    element-loading-background="rgba(255, 255, 255, 1)"></div>
 </template>
 
 <style lang="less" scoped>
-#container{
+#container {
   width: 100%;
   height: 80vh;
-
 }
-
 </style>

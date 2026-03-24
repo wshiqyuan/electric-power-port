@@ -4,21 +4,20 @@ import { getInfo } from '@/api/personal'
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import StepForm from '@/components/stepForm/StepForm.vue'
-import type{ FormInstance } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import { submitChangeInfo } from '@/api/personal'
 import { getNotice } from '@/api/personal'
 import { useNotificationStore } from '@/store/notification'
-
 
 // 个人信息
 const infoList = ref<any>([])
 const dateValue = ref(new Date())
 
 const loadingPersonalData = async () => {
-  try{
+  try {
     const { data } = await getInfo()
     infoList.value = data
-  }catch(error){
+  } catch (error) {
     ElMessage.error('获取个人信息失败')
 
   }
@@ -49,8 +48,8 @@ const formData = ref({
   }
 })
 
-const handleSubmit = async() => {
-  try{
+const handleSubmit = async () => {
+  try {
     const res = await submitChangeInfo(formData.value)
     formData.value = {
       basicInfo: {
@@ -62,11 +61,11 @@ const handleSubmit = async() => {
         status: '',
       }
     }
-    if(res.code === 200){
+    if (res.code === 200) {
       ElMessage.success('提交个人信息成功')
       loadingPersonalData()
     }
-  }catch(error){
+  } catch (error) {
     ElMessage.error('提交个人信息失败')
   }
 }
@@ -82,14 +81,14 @@ const loading = ref(false)
 
 onMounted(async () => {
   loading.value = true
-  try{
-    const { data:{ notice,infoType } } = await getNotice()
+  try {
+    const { data: { notice, infoType } } = await getNotice()
     noticeList.value = notice
     noticeListCopy.value = noticeList.value
     infoTypeList.value = infoType
     notificationStore.setTotalCount(notice.length)
     loading.value = false
-  }catch(error){
+  } catch (error) {
     ElMessage.error('获取消息通知失败')
     loading.value = false
   }
@@ -110,8 +109,6 @@ const handleRead = (title: string, type: string) => {
   }
 }
 
-
-
 </script>
 
 <template>
@@ -124,26 +121,16 @@ const handleRead = (title: string, type: string) => {
               <span>个人信息</span>
             </div>
           </template>
-          <el-descriptions
-            direction="vertical"
-            border
-          >
-            <el-descriptions-item
-              :rowspan="2"
-              :width="140"
-              label="头像"
-              align="center"
-            >
-              <el-image
-                style="width: 100px; height: 100px"
-                :src="avatar"
-              />
+          <el-descriptions direction="vertical" border>
+            <el-descriptions-item :rowspan="2" :width="140" label="头像" align="center">
+              <el-image style="width: 100px; height: 100px" :src="avatar" />
             </el-descriptions-item>
             <el-descriptions-item label="姓名">{{ infoList.name }}</el-descriptions-item>
             <el-descriptions-item label="电话">{{ infoList.phone }}</el-descriptions-item>
             <el-descriptions-item label="地址">{{ infoList.address }}</el-descriptions-item>
             <el-descriptions-item label="个人标签">
-              <el-tag size="small" type="primary" class="mr" v-for="item in infoList.personalTag" :key="item">{{ item }}</el-tag>
+              <el-tag size="small" type="primary" class="mr" v-for="item in infoList.personalTag" :key="item">{{ item
+              }}</el-tag>
             </el-descriptions-item>
           </el-descriptions>
         </el-card>
@@ -179,12 +166,12 @@ const handleRead = (title: string, type: string) => {
                 </template>
                 <template #step-2>
                   <el-form :model="formData.workInfo" ref="FormRef2">
-                      <el-select placeholder="请选择在职状态" v-model="formData.workInfo.status">
-                        <el-option label="工作中" value="1" />
-                        <el-option label="请假中" value="2" />
-                        <el-option label="出差中" value="3" />
-                        <el-option label="年假中" value="4" />
-                      </el-select>
+                    <el-select placeholder="请选择在职状态" v-model="formData.workInfo.status">
+                      <el-option label="工作中" value="1" />
+                      <el-option label="请假中" value="2" />
+                      <el-option label="出差中" value="3" />
+                      <el-option label="年假中" value="4" />
+                    </el-select>
                   </el-form>
                 </template>
               </StepForm>
@@ -200,13 +187,14 @@ const handleRead = (title: string, type: string) => {
       </el-col>
       <el-col :span="12">
         <el-card v-loading="loading">
-          <el-badge :hidden="item.count === 0" :value="item.count" class="item mr" v-for="item in infoTypeList" :key="item.type">
+          <el-badge :hidden="item.count === 0" :value="item.count" class="item mr" v-for="item in infoTypeList"
+            :key="item.type">
             <el-button @click="handleClick(item.type)">{{ item.type }}</el-button>
           </el-badge>
         </el-card>
         <el-card class="mt" v-loading="loading">
           <el-collapse v-show="noticeList.length > 0">
-            <el-collapse-item :title="item.title" v-for="(item,index) in noticeList" :key="index">
+            <el-collapse-item :title="item.title" v-for="(item, index) in noticeList" :key="index">
               <div style="display: flex; justify-content: space-between;">
                 <h3>{{ item.content }}</h3>
                 <p>{{ item.time }}</p>
@@ -225,18 +213,18 @@ const handleRead = (title: string, type: string) => {
 
 <style lang="less" scoped>
 .changeInfoTitle {
-  display: flex; 
+  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: space-around;
-  h1{
+
+  h1 {
     margin-bottom: 40px;
   }
 }
 
-.el-button:hover{
-  background-color: rgb(43,137,211) !important;
+.el-button:hover {
+  background-color: rgb(43, 137, 211) !important;
   color: #fff !important;
 }
-
 </style>

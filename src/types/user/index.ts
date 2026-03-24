@@ -1,7 +1,7 @@
 interface MenuItem {
-  name: string
-  url: string
-  icon: string
-  children?: MenuItem[]
+  name: string;
+  url: string;
+  icon: string;
+  children?: MenuItem[];
 }
-export type { MenuItem }
+export type { MenuItem };

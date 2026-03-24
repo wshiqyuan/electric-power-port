@@ -6,16 +6,16 @@ import { useStationStore } from '@/store/station'
 import { storeToRefs } from 'pinia'
 
 const ruleForm = ref<RowType>({
-  name:'',
-  id:'',
-  city:'',
-  fast:'',
-  slow:'',
+  name: '',
+  id: '',
+  city: '',
+  fast: '',
+  slow: '',
   status: 3,
-  now:'',
-  fault:'',
-  person:'',
-  tel:''
+  now: '',
+  fault: '',
+  person: '',
+  tel: ''
 })
 
 const rules = reactive<FormRules<RowType>>({
@@ -29,7 +29,7 @@ const rules = reactive<FormRules<RowType>>({
     { required: true, message: '请输入所属城市', trigger: 'blur' }
   ],
   fast: [
-    { required: true, message: '请输入快充数', trigger: 'blur' } 
+    { required: true, message: '请输入快充数', trigger: 'blur' }
   ],
   slow: [
     { required: true, message: '请输入慢充数', trigger: 'blur' }
@@ -52,104 +52,93 @@ const rules = reactive<FormRules<RowType>>({
   ]
 })
 
-  const title = ref<string>('')
-  const emit = defineEmits(['close:dialogVisible', 'reload'])
+const title = ref<string>('')
+const emit = defineEmits(['close:dialogVisible', 'reload'])
 
-  const stationStore = useStationStore()
-  const { rowData } = storeToRefs(stationStore)
+const stationStore = useStationStore()
+const { rowData } = storeToRefs(stationStore)
 
-  const disabled = ref(false)
+const disabled = ref(false)
 
-  const props = defineProps({
-    dialogVisible: {
-      type: Boolean,
-      required: true,
-      default: false
-    }
-  })
-
-  const handleCancel = () => {
-    emit('close:dialogVisible', false)
+const props = defineProps({
+  dialogVisible: {
+    type: Boolean,
+    required: true,
+    default: false
   }
+})
 
-  watch(() => props.dialogVisible, () => {
-    if (rowData.value.id) {
-      title.value = '编辑充电站'
-      disabled.value = true
-    } else {
-      title.value = '新增充电站'
-      disabled.value = false
-    }
-    ruleForm.value = rowData.value
-  })
+const handleCancel = () => {
+  emit('close:dialogVisible', false)
+}
 
-  import { editApi } from '@/api/chargingstation'
-  import type { FormInstance } from 'element-plus'
-  import { ElMessage } from 'element-plus'
+watch(() => props.dialogVisible, () => {
+  if (rowData.value.id) {
+    title.value = '编辑充电站'
+    disabled.value = true
+  } else {
+    title.value = '新增充电站'
+    disabled.value = false
+  }
+  ruleForm.value = rowData.value
+})
 
-  const formRef = ref<FormInstance | null>(null)
+import { editApi } from '@/api/chargingstation'
+import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
-  const updataLoading = ref<boolean>(false)
+const formRef = ref<FormInstance | null>(null)
 
-  const handleSubmit = () => {
-    formRef.value?.validate( async (vaild:boolean) => {
-      if (vaild) {
-        updataLoading.value = true
-        const res = await editApi(ruleForm.value)
-        if (res.code === 200) {
-          ElMessage.success(res.data)
-          handleCancel()
-          emit('reload')
-          updataLoading.value = false
-        } else {
-          ElMessage.error('编辑失败')
-          updataLoading.value = false
-        }
+const updataLoading = ref<boolean>(false)
+
+const handleSubmit = () => {
+  formRef.value?.validate(async (vaild: boolean) => {
+    if (vaild) {
+      updataLoading.value = true
+      const res = await editApi(ruleForm.value)
+      if (res.code === 200) {
+        ElMessage.success(res.data)
+        handleCancel()
+        emit('reload')
+        updataLoading.value = false
+      } else {
+        ElMessage.error('编辑失败')
+        updataLoading.value = false
       }
-    })
-  }
+    }
+  })
+}
 
 </script>
 
 <template>
-    <el-dialog
-    :title="title"
-    :model-value="props.dialogVisible"
-    @close="handleCancel"
-    destroy-on-close
-    >
-    <el-form 
-      label-width="120"
-      :rules="rules"
-      :model="ruleForm"
-      label-position="left"
-      ref="formRef"
-    >
+  <el-dialog :title="title" :model-value="props.dialogVisible" @close="handleCancel" destroy-on-close>
+    <el-form label-width="120" :rules="rules" :model="ruleForm" label-position="left" ref="formRef">
       <el-row>
         <el-col :span="12" style="padding-right: 20px;">
           <el-form-item label="站点名称:" prop="name">
             <el-input v-model="ruleForm.name" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="站点id:" prop="id">
             <el-input :disabled="disabled" v-model="ruleForm.id" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="所属城市:" prop="city">
             <el-input v-model="ruleForm.city" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="站点负责人:" prop="person">
             <el-input v-model="ruleForm.person" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="负责人手机号:" prop="tel">
             <el-input v-model="ruleForm.tel" />
-          </el-form-item>          
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="快充数:" prop="fast">
             <el-input v-model="ruleForm.fast" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="慢充数:" prop="slow">
             <el-input v-model="ruleForm.slow" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="充电站状态:" prop="status">
             <el-select :disabled="disabled" v-model="ruleForm.status" placeholder="请选择">
               <el-option label="使用中" :value="2" />
@@ -157,13 +146,13 @@ const rules = reactive<FormRules<RowType>>({
               <el-option label="维护中" :value="4" />
               <el-option label="待维修" :value="5" />
             </el-select>
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="正常使用数:" prop="now">
             <el-input :disabled="disabled" v-model="ruleForm.now" />
-          </el-form-item>          
+          </el-form-item>
           <el-form-item label="故障数:" prop="fault">
             <el-input :disabled="disabled" v-model="ruleForm.fault" />
-          </el-form-item> 
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -178,7 +167,4 @@ const rules = reactive<FormRules<RowType>>({
   </el-dialog>
 </template>
 
-<style lang="less" scoped>
-
-
-</style>
+<style lang="less" scoped></style>

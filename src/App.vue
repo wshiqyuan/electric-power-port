@@ -9,7 +9,3 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
     <RouterView></RouterView>
   </ElConfigProvider>
 </template>
-
-<style scoped>
-
-</style>

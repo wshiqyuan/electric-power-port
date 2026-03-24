@@ -1,4 +1,4 @@
-const fieldLabelMap:Record<string,string> = {
+const fieldLabelMap: Record<string, string> = {
   description: "故障描述",
   address: "设备地址",
   equNo: "设备编号",
@@ -6,12 +6,10 @@ const fieldLabelMap:Record<string,string> = {
   time: "故障时间",
   code: "故障代码",
   status: "当前状态",
-}
+};
 
-const getLabel = (key: string):string => {
-  return fieldLabelMap[key] || key
-}
+const getLabel = (key: string): string => {
+  return fieldLabelMap[key] || key;
+};
 
-export {
-  getLabel
-}
+export { getLabel };

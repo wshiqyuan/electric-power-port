@@ -20,12 +20,12 @@ const defaultProps = {
 const treeData = ref<Tree[]>([])
 const treeRef = ref<InstanceType<typeof ElTree>>()
 
-onMounted (async () => {
+onMounted(async () => {
   const { data } = await getTreeApi()
   treeData.value = data
 })
 
-const filterNode:any = (value: string, data: Tree) => {
+const filterNode: any = (value: string, data: Tree) => {
   if (!value) return true
   return data.label.includes(value)
 }
@@ -70,13 +70,13 @@ const ruleForm = ref<RulrFormType>({
   service: '',
   parking: '',
   remarks: '',
-  date:[
-    {begin: '', end: '', electricity: ''}
+  date: [
+    { begin: '', end: '', electricity: '' }
   ]
 })
 
 const addTimeSlot = () => {
-  ruleForm.value.date.push({begin: '', end: '', electricity: ''})
+  ruleForm.value.date.push({ begin: '', end: '', electricity: '' })
 }
 
 const updataLoading = ref<boolean>(false)
@@ -86,7 +86,7 @@ const submitForm = async () => {
     if (valid) {
       updataLoading.value = true
       try {
-        const res = await totalFormApi({...ruleForm.value, name: title.value})
+        const res = await totalFormApi({ ...ruleForm.value, name: title.value })
         if (res.code === 200) {
           ElMessage.success('操作成功')
           updataLoading.value = false
@@ -107,8 +107,8 @@ const resetForm = () => {
     service: '',
     parking: '',
     remarks: '',
-    date:[
-      {begin: '', end: '', electricity: ''}
+    date: [
+      { begin: '', end: '', electricity: '' }
     ]
   }
 }
@@ -132,15 +132,8 @@ const handleNodeClick = (data: Tree) => {
               <el-button icon="Search" />
             </template>
           </el-input>
-          <el-tree 
-            ref="treeRef"
-            :data="treeData" 
-            style="max-width: 600px;" 
-            :props="defaultProps" 
-            class="mt"
-            :filter-node-method="filterNode"
-            @node-click="handleNodeClick"
-          ></el-tree>
+          <el-tree ref="treeRef" :data="treeData" style="max-width: 600px;" :props="defaultProps" class="mt"
+            :filter-node-method="filterNode" @node-click="handleNodeClick"></el-tree>
         </el-card>
       </el-col>
       <el-col :span="18">
@@ -152,37 +145,32 @@ const handleNodeClick = (data: Tree) => {
           </template>
           <el-form ref="ruleFormRef" style="width: 100%;" :model="ruleForm" :rules="rules" label-width="auto">
             <el-form-item label="计费模板名称" prop="name">
-              <el-input v-model.trim="ruleForm.name" placeholder="请输入计费模板名称" style="max-width: 300px;" :disabled="!title" />
+              <el-input v-model.trim="ruleForm.name" placeholder="请输入计费模板名称" style="max-width: 300px;"
+                :disabled="!title" />
             </el-form-item>
             <el-form-item :label="`时间区间${index + 1}`" v-for="(timeSlot, index) in ruleForm.date" :key="index">
               <el-col :span="8">
-                <el-form-item :prop="`date.${index}.begin`" :rules="{required: true, message: '请选择开始时间', trigger: 'blur'}">
-                  <el-time-picker 
-                    style="width: 100%;"
-                    placeholder="选择开始时间" 
-                    v-model.trim="timeSlot.begin"
-                    value-format="HH:mm"
-                    :disabled="!title"
-                  />
+                <el-form-item :prop="`date.${index}.begin`"
+                  :rules="{ required: true, message: '请选择开始时间', trigger: 'blur' }">
+                  <el-time-picker style="width: 100%;" placeholder="选择开始时间" v-model.trim="timeSlot.begin"
+                    value-format="HH:mm" :disabled="!title" />
                 </el-form-item>
               </el-col>
               <el-col :span="1" style="text-align: center;">
                 <span>至</span>
               </el-col>
               <el-col :span="8">
-                <el-form-item :prop="`date.${index}.end`" :rules="{required: true, message: '请选择结束时间', trigger: 'blur'}">
-                  <el-time-picker
-                    style="width: 100%;"
-                    placeholder="选择结束时间" 
-                    v-model.trim="timeSlot.end"
-                    value-format="HH:mm"
-                    :disabled="!title"
-                  />
+                <el-form-item :prop="`date.${index}.end`"
+                  :rules="{ required: true, message: '请选择结束时间', trigger: 'blur' }">
+                  <el-time-picker style="width: 100%;" placeholder="选择结束时间" v-model.trim="timeSlot.end"
+                    value-format="HH:mm" :disabled="!title" />
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="电费/h" :prop="`date.${index}.electricity`" :rules="{required: true, message: '请输入电费', trigger: 'blur'}">
-                  <el-input v-model.trim="timeSlot.electricity" placeholder="请输入电费" style="width: 100% !important;" :disabled="!title" />
+                <el-form-item label="电费/h" :prop="`date.${index}.electricity`"
+                  :rules="{ required: true, message: '请输入电费', trigger: 'blur' }">
+                  <el-input v-model.trim="timeSlot.electricity" placeholder="请输入电费" style="width: 100% !important;"
+                    :disabled="!title" />
                 </el-form-item>
               </el-col>
             </el-form-item>
@@ -207,7 +195,4 @@ const handleNodeClick = (data: Tree) => {
   </div>
 </template>
 
-<style lang="less" scoped>
-
-
-</style>
+<style lang="less" scoped></style>

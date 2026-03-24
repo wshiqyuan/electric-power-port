@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 
 const currentStep = ref<number>(0)
-const props = defineProps(["submitLoading","steps","FormRef1","FormRef2","FormRef3"])
+const props = defineProps(["submitLoading", "steps", "FormRef1", "FormRef2", "FormRef3"])
 
 const emit = defineEmits(['submit'])
 
-const nextStep =  () => {
+const nextStep = () => {
   const forms = [props.FormRef1, props.FormRef2, props.FormRef3]
   const currentForm = forms[currentStep.value]
   currentForm.validate((valid: boolean) => {
     if (valid) {
       if (currentStep.value < props.steps.length - 1) {
         currentStep.value++
-      }else{
+      } else {
         emit('submit')
         currentStep.value = 0
       }
@@ -29,7 +29,7 @@ const nextStep =  () => {
   <div style="max-width: 650px;">
     <div>
       <el-steps :active="currentStep" finish-status="success" align-center>
-        <el-step v-for="(step,index) in steps" :key="index" :title="step.title" />
+        <el-step v-for="(step, index) in steps" :key="index" :title="step.title" />
       </el-steps>
     </div>
     <div v-if="currentStep === 0" class="mt">
@@ -50,7 +50,4 @@ const nextStep =  () => {
   </div>
 </template>
 
-<style lang="less" scoped>
-
-
-</style>
+<style lang="less" scoped></style>

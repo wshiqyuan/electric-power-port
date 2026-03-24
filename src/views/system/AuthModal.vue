@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/store/auth'
 import { storeToRefs } from 'pinia'
 import { transformMenu } from '@/utils/transformMenu'
@@ -40,7 +40,7 @@ const handleOpen = () => {
   initBtnAuth.value = props.btnAuth as string[]
 }
 
-const handleClose = () =>{
+const handleClose = () => {
   emits('close')
   emits('reload')
 }
@@ -55,19 +55,19 @@ const initBtnAuth = ref<string[]>([])
 
 const updataLoading = ref<boolean>(false)
 
-const handleConfirm = async() => {
-  try{
+const handleConfirm = async () => {
+  try {
     updataLoading.value = true
     const res = await setAuthApi(props.accountNum, treeRef.value.getCheckedKeys(true), initBtnAuth.value)
     console.log(res)
     updataLoading.value = false
-    if(res.code === 200){
+    if (res.code === 200) {
       ElMessage.success("权限设置成功")
       updataLoading.value = false
       handleClose()
     }
-  }catch(err){
-    console.log("权限设置失败",err)
+  } catch (err) {
+    console.log("权限设置失败", err)
     ElMessage.error("权限设置失败")
   }
 }
@@ -84,13 +84,7 @@ const handleConfirm = async() => {
             <span>页面权限</span>
           </div>
         </template>
-        <el-tree
-          ref="treeRef"
-          style="max-width: 600px"
-          :data="treeData"
-          node-key="url"
-          show-checkbox
-        />
+        <el-tree ref="treeRef" style="max-width: 600px" :data="treeData" node-key="url" show-checkbox />
       </el-card>
       <el-card class="mt">
         <template #header>
@@ -112,7 +106,4 @@ const handleConfirm = async() => {
   </div>
 </template>
 
-<style lang="less" scoped>
-
-
-</style>
+<style lang="less" scoped></style>

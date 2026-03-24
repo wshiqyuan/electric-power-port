@@ -1,94 +1,94 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue'
-  import { listApi, deleteApi } from '@/api/chargingstation'
-  import StationForm from './components/StationForm.vue'
-  import type { RowType } from '@/types/station'
-  import { useStationStore } from '@/store/station'
-  import { ElMessage } from 'element-plus'
+import { ref, reactive, onMounted } from 'vue'
+import { listApi, deleteApi } from '@/api/chargingstation'
+import StationForm from './components/StationForm.vue'
+import type { RowType } from '@/types/station'
+import { useStationStore } from '@/store/station'
+import { ElMessage } from 'element-plus'
 
-  const select = ref('name')
-  const formParams = reactive({
-    input: '',
-    value: 1
-  })
+const select = ref('name')
+const formParams = reactive({
+  input: '',
+  value: 1
+})
 
-  const tableData = ref<RowType[]>([])
-  
-  const pageInfo = ref({
-    page: 1,
-    pageSize: 10,
-  })
+const tableData = ref<RowType[]>([])
 
-  const loading = ref<boolean>(false)
+const pageInfo = ref({
+  page: 1,
+  pageSize: 10,
+})
 
-  const totalNum = ref<number>(0)
+const loading = ref<boolean>(false)
 
-  const searchLoading = ref<boolean>(false)
+const totalNum = ref<number>(0)
 
-  const loadData = async () => {
-    searchLoading.value = true
-    loading.value = true
-    try{
-      const { data:{ list, total } } = await listApi({ ...pageInfo.value, status:formParams.value, [select.value]: formParams.input })
-      loading.value = false
-      searchLoading.value = false
-      tableData.value = list
-      totalNum.value = total
-    }catch(error){
-      ElMessage.error('查询失败')
-      searchLoading.value = false
-      loading.value = false
+const searchLoading = ref<boolean>(false)
+
+const loadData = async () => {
+  searchLoading.value = true
+  loading.value = true
+  try {
+    const { data: { list, total } } = await listApi({ ...pageInfo.value, status: formParams.value, [select.value]: formParams.input })
+    loading.value = false
+    searchLoading.value = false
+    tableData.value = list
+    totalNum.value = total
+  } catch (error) {
+    ElMessage.error('查询失败')
+    searchLoading.value = false
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadData()
+})
+
+const handleSizeChange = (pageSize: number) => {
+  pageInfo.value.pageSize = pageSize
+  loadData()
+}
+
+const handleCurrentChange = (page: number) => {
+  pageInfo.value.page = page
+  loadData()
+}
+
+const resetForm = () => {
+  formParams.input = ''
+  formParams.value = 1
+  select.value = 'name'
+  pageInfo.value.page = 1
+  pageInfo.value.pageSize = 10
+  loadData()
+}
+
+const visible = ref<boolean>(false)
+const stationStore = useStationStore()
+
+const edit = (row: RowType) => {
+  visible.value = true
+  stationStore.setRowData(row)
+}
+
+const handleAdd = () => {
+  stationStore.clearRowData()
+  visible.value = true
+}
+
+const handleDelete = async (id: string) => {
+  try {
+    const res = await deleteApi(id)
+    if (res.code === 200) {
+      ElMessage.success(res.data)
+      console.log(res)
+      loadData()
     }
+  } catch (error) {
+    ElMessage.error('删除失败')
   }
-
-  onMounted(() => {
-    loadData()
-  })
-
-  const handleSizeChange = (pageSize: number) => {
-    pageInfo.value.pageSize = pageSize
-    loadData()
-  }
-
-  const handleCurrentChange = (page: number) => {
-    pageInfo.value.page = page
-    loadData()
-  }
-
-  const resetForm = () => {
-    formParams.input = ''
-    formParams.value = 1
-    select.value = 'name'
-    pageInfo.value.page = 1
-    pageInfo.value.pageSize = 10
-    loadData()
-  }
-
-  const visible = ref<boolean>(false)
-  const stationStore = useStationStore()
-
-  const edit = (row: RowType) => {
-    visible.value = true
-    stationStore.setRowData(row)
-  }
-
-  const handleAdd = () => {
-    stationStore.clearRowData()
-    visible.value = true
-  }
-
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await deleteApi(id)
-      if (res.code === 200) {
-        ElMessage.success(res.data)
-        console.log(res)
-        loadData()
-      }
-    } catch (error) {
-      ElMessage.error('删除失败')
-    } 
-  }
+}
 
 </script>
 
@@ -163,14 +163,8 @@
         <el-table-column label="操作" class="button" width="150">
           <template #default="scope">
             <el-button type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-popconfirm
-              confirm-button-text="是"
-              cancel-button-text="否"
-              icon="WarningFilled"
-              icon-color="#F56C6C"
-              title="确定删除当前站点信息吗?"
-              @confirm="handleDelete(scope.row.id)"
-            >
+            <el-popconfirm confirm-button-text="是" cancel-button-text="否" icon="WarningFilled" icon-color="#F56C6C"
+              title="确定删除当前站点信息吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="danger" size="small" v-permission="['admin']">删除</el-button>
               </template>
@@ -178,17 +172,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        v-show="totalNum > 0"
-        v-model:current-page="pageInfo.page"
-        v-model:page-size="pageInfo.pageSize"
-        :page-sizes="[10, 20, 30, 40]"
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-        :total="totalNum"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination v-show="totalNum > 0" v-model:current-page="pageInfo.page" v-model:page-size="pageInfo.pageSize"
+        :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" background :total="totalNum"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
     <StationForm :dialog-visible="visible" @close:dialogVisible="visible = false" @reload="loadData" />
 
@@ -199,6 +185,7 @@
 .el-col {
   text-align: center;
 }
+
 .el-pagination {
   display: flex;
   justify-content: flex-end;

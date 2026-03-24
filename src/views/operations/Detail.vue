@@ -4,7 +4,6 @@ import { useRoute } from 'vue-router'
 import { orderDetailApi } from '@/api/operation'
 import { ElMessage } from 'element-plus'
 
-
 const orderNo = ref<string>('')
 const route = useRoute()
 
@@ -14,12 +13,12 @@ if (route.query.orderNo) {
   orderNo.value = route.query.orderNo as string
 }
 
-onMounted( async() => {
-  try{
+onMounted(async () => {
+  try {
     const { data } = await orderDetailApi(orderNo.value)
     orderDetail.value = data
     ElMessage.success('获取订单详情成功')
-  }catch(err){
+  } catch (err) {
     ElMessage.error('获取订单详情失败')
   }
 })
@@ -29,7 +28,7 @@ watch(() => route.query.orderNo, (newVal, oldVal) => {
     orderNo.value = newVal as string
     fetchData()
   }
-},{immediate: false})
+}, { immediate: false })
 
 const fetchData = async () => {
   try {
@@ -42,19 +41,12 @@ const fetchData = async () => {
   }
 }
 
-
-
 </script>
 
 <template>
   <div>
     <el-card>
-      <el-descriptions
-        class="margin-top"
-        :title="`订单编号：${orderDetail.orderNo}`"
-        :column="3"
-        border
-      >
+      <el-descriptions class="margin-top" :title="`订单编号：${orderDetail.orderNo}`" :column="3" border>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">
@@ -240,7 +232,9 @@ const fetchData = async () => {
               订单状态
             </div>
           </template>
-          <el-tag size="small"  :type="orderDetail.status === 2 ? 'success' : orderDetail.status === 3 ? 'primary': 'warning'">{{ orderDetail.status === 2 ? '进行中' : orderDetail.status === 3 ? '已完成' : '异常' }}</el-tag>
+          <el-tag size="small"
+            :type="orderDetail.status === 2 ? 'success' : orderDetail.status === 3 ? 'primary' : 'warning'">{{
+              orderDetail.status === 2 ? '进行中' : orderDetail.status === 3 ? '已完成' : '异常' }}</el-tag>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -295,14 +289,12 @@ const fetchData = async () => {
               收费信息
             </div>
           </template>
-          电费：{{ orderDetail.electricity }}元，停车费：{{ orderDetail.parking }}元，服务费：{{ orderDetail.service }}元，总共：{{ orderDetail.money }}元
+          电费：{{ orderDetail.electricity }}元，停车费：{{ orderDetail.parking }}元，服务费：{{ orderDetail.service }}元，总共：{{
+            orderDetail.money }}元
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
   </div>
 </template>
 
-<style lang="scss" scoped>
-
-
-</style>
+<style lang="scss" scoped></style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Menu from '@/components/navMenu/Menu.vue'
-  import TopHeader from '@/components/topHeader/TopHeader.vue'
-  import TabsLayout from './TabsLayout.vue'
+import Menu from '@/components/navMenu/Menu.vue'
+import TopHeader from '@/components/topHeader/TopHeader.vue'
+import TabsLayout from './TabsLayout.vue'
 
 </script>
 
@@ -24,16 +24,18 @@
 </template>
 
 <style scoped lang="less">
-  .el-aside{
-    height: 100vh;
-    background-color: #f4f3f4;
-    box-shadow: 10px 2px 10px -3px rgba(0, 0, 0, 0.3);
-  }
-  .el-header{
-    padding: 0 !important;
-  }
-  .el-main{
-    height: 80vh;
-    overflow: auto;
-  }
+.el-aside {
+  height: 100vh;
+  background-color: #f4f3f4;
+  box-shadow: 10px 2px 10px -3px rgba(0, 0, 0, 0.3);
+}
+
+.el-header {
+  padding: 0 !important;
+}
+
+.el-main {
+  height: 80vh;
+  overflow: auto;
+}
 </style>

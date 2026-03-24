@@ -41,12 +41,12 @@ const setChartOptions = async () => {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00','16:00','18:00','20:00','22:00','00:00']
+      data: ['2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '00:00']
     },
     yAxis: {
       type: 'value',
-      axisLabel:{
-        formatter:'{value}kw'
+      axisLabel: {
+        formatter: '{value}kw'
       }
     },
     series: [
@@ -54,11 +54,11 @@ const setChartOptions = async () => {
         name: '',
         type: 'line',
         data: [],
-        smooth:true,
-        lineStyle:{
+        smooth: true,
+        lineStyle: {
           width: 4
         },
-        itemStyle:{
+        itemStyle: {
           color: 'purple',
           shadowBlur: 5,
           shadowColor: 'rgba(0,255,0,0.5)'
@@ -68,12 +68,12 @@ const setChartOptions = async () => {
         name: '',
         type: 'line',
         data: [],
-        smooth:true,
-        lineStyle:{
+        smooth: true,
+        lineStyle: {
           width: 4
         },
-        itemStyle:{
-          color:'lightgreen',
+        itemStyle: {
+          color: 'lightgreen',
           shadowBlur: 5,
           shadowColor: 'rgba(0,255,0,0.5)'
         }
@@ -82,11 +82,11 @@ const setChartOptions = async () => {
         name: '',
         type: 'line',
         data: [],
-        smooth:true,
-        lineStyle:{
+        smooth: true,
+        lineStyle: {
           width: 4
         },
-        itemStyle:{
+        itemStyle: {
           color: 'skyblue',
           shadowBlur: 5,
           shadowColor: 'rgba(0,255,0,0.5)'
@@ -94,10 +94,10 @@ const setChartOptions = async () => {
       },
     ]
   })
-  const res =  await chartDataApi()
+  const res = await chartDataApi()
   if (res.code === 200) {
     chartOptions.legend.data = res.data.list.map((item: any) => item.name)
-    for ( let i = 0; i < res.data.list.length; i++ ) {
+    for (let i = 0; i < res.data.list.length; i++) {
       chartOptions.series[i].name = res.data.list[i].name
       chartOptions.series[i].data = res.data.list[i].data
     }
@@ -113,9 +113,9 @@ const setChartOptions2 = async () => {
     legend: {
       top: 'bottom'
     },
-    tooltip:{
+    tooltip: {
       trigger: 'item',
-      formatter:'{a}<br />{b}:{c}'
+      formatter: '{a}<br />{b}:{c}'
     },
     series: [
       {
@@ -129,13 +129,13 @@ const setChartOptions2 = async () => {
         },
         label: {
           show: false,
-          position:'inner'
+          position: 'inner'
         },
-        emphasis:{
-          label:{
-            show:true,
-            fontSize:"16",
-            fontWeight:"bold"
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: "16",
+            fontWeight: "bold"
           }
         },
         data: [
@@ -143,24 +143,24 @@ const setChartOptions2 = async () => {
           { value: 30, name: '充电站' },
           { value: 25, name: '充电柜' }
         ],
-        labelLine:{
-          smooth:true,
-          length:1
+        labelLine: {
+          smooth: true,
+          length: 1
         }
       }
     ],
-    graphic:{
-      type:"text",
-      left:"center",
-      top:"center",
-      style:{
-        text:"营收占比",
-        fontSize:16,
-        fill:'#333'
+    graphic: {
+      type: "text",
+      left: "center",
+      top: "center",
+      style: {
+        text: "营收占比",
+        fontSize: 16,
+        fill: '#333'
       }
     }
   })
-  const res =  await chartDataApi2()
+  const res = await chartDataApi2()
   chartOptions.series[0].data = res.data.list
   return chartOptions
 
@@ -171,15 +171,15 @@ const chartRef3 = ref(null)
 const setChartOptions3 = async () => {
   const chartOptions: any = reactive({
     radar: {
-    // shape: 'circle',
-    indicator: [
-      { name: '闲置数', max: 65 },
-      { name: '使用数', max: 160 },
-      { name: '故障数', max: 300 },
-      { name: '维修数', max: 380 },
-      { name: '更换数', max: 550 },
-      { name: '报废数', max: 240 }
-    ]
+      // shape: 'circle',
+      indicator: [
+        { name: '闲置数', max: 65 },
+        { name: '使用数', max: 160 },
+        { name: '故障数', max: 300 },
+        { name: '维修数', max: 380 },
+        { name: '更换数', max: 550 },
+        { name: '报废数', max: 240 }
+      ]
     },
     series: [
       {
@@ -199,10 +199,8 @@ const setChartOptions3 = async () => {
     chartOptions.series[0].data[0].value = res.data.list
     return chartOptions
   }
-} 
+}
 useChart(chartRef3, setChartOptions3)
-
-
 
 const router = useRouter()
 const { addTab, setCurrentTab } = useTabsStore()
@@ -222,7 +220,6 @@ const handleClick = (e: Event) => {
   }
 }
 
-
 </script>
 
 <template>
@@ -232,7 +229,8 @@ const handleClick = (e: Event) => {
         <div class="title">
           <h3 class="mr">今日设备运行状态</h3>
           <p>更新时间：{{ updateTime }}</p>
-          <el-icon class="refresh-icon" @click="refreshClick" color="#86909c" style="margin-left: 5px; padding-bottom: 4px;">
+          <el-icon class="refresh-icon" @click="refreshClick" color="#86909c"
+            style="margin-left: 5px; padding-bottom: 4px;">
             <Refresh />
           </el-icon>
         </div>
@@ -246,11 +244,7 @@ const handleClick = (e: Event) => {
                 <template #title>
                   <div style="display: inline-flex; align-items: center">
                     异常设备
-                    <el-tooltip
-                      effect="dark"
-                      content="出现异常状况的设备数量，请尽快处理"
-                      placement="top"
-                    >
+                    <el-tooltip effect="dark" content="出现异常状况的设备数量，请尽快处理" placement="top">
                       <el-icon style="margin-left: 4px" :size="12">
                         <Warning />
                       </el-icon>
@@ -280,11 +274,7 @@ const handleClick = (e: Event) => {
                 <template #title>
                   <div style="display: inline-flex; align-items: center">
                     异常设备
-                    <el-tooltip
-                      effect="dark"
-                      content="出现异常状况的设备数量，请尽快处理"
-                      placement="top"
-                    >
+                    <el-tooltip effect="dark" content="出现异常状况的设备数量，请尽快处理" placement="top">
                       <el-icon style="margin-left: 4px" :size="12">
                         <Warning />
                       </el-icon>
@@ -314,11 +304,7 @@ const handleClick = (e: Event) => {
                 <template #title>
                   <div style="display: inline-flex; align-items: center">
                     异常设备
-                    <el-tooltip
-                      effect="dark"
-                      content="出现异常状况的设备数量，请尽快处理"
-                      placement="top"
-                    >
+                    <el-tooltip effect="dark" content="出现异常状况的设备数量，请尽快处理" placement="top">
                       <el-icon style="margin-left: 4px" :size="12">
                         <Warning />
                       </el-icon>
@@ -382,16 +368,16 @@ const handleClick = (e: Event) => {
             <h1>能源统计</h1>
           </div>
         </template>
-          <el-row>
-            <el-col :span="8">
-              <div ref="chartRef2" style="width: 100%; height: 400px;">
-              </div>
-            </el-col>
-            <el-col :span="16">
-              <div ref="chartRef" style="width: 100%; height: 400px;">
-              </div>
-            </el-col>
-          </el-row>
+        <el-row>
+          <el-col :span="8">
+            <div ref="chartRef2" style="width: 100%; height: 400px;">
+            </div>
+          </el-col>
+          <el-col :span="16">
+            <div ref="chartRef" style="width: 100%; height: 400px;">
+            </div>
+          </el-col>
+        </el-row>
       </el-card>
     </el-col>
     <el-col :span="6">
@@ -409,86 +395,86 @@ const handleClick = (e: Event) => {
             <h1>营收统计表</h1>
           </div>
         </template>
-          <ul class="ranking-list">
-            <li class="ranking-item">
-              <span class="rank" style="background-color: rgb(103, 194, 58); color: #f4f3f3;">1</span>
-              <span class="store-name">广州</span>
-              <span class="sales">512,457</span>
-              <span style="margin-left: 50px;">
-                24
-                <el-icon class="green">
-                  <CaretTop />
-                </el-icon>
-              </span>
-            </li>
-            <li class="ranking-item">
-              <span class="rank" style="background-color: rgb(15,131,218); color: #f4f3f3;">2</span>
-              <span class="store-name">上海</span>
-              <span class="sales">323,234</span>
-              <span style="margin-left: 50px;">
-                21
-                <el-icon class="red">
-                  <CaretBottom />
-                </el-icon>
-              </span>
-            </li>
-            <li class="ranking-item">
-              <span class="rank" style="background-color: rgb(245,109, 81); color: #f4f3f3;">3</span>
-              <span class="store-name">佛山</span>
-              <span class="sales">193,255</span>
-              <span style="margin-left: 50px;">
-                37
-                <el-icon class="green">
-                  <CaretTop />
-                </el-icon>
-              </span>
-            </li>
-            <li class="ranking-item">
-              <span class="rank">4</span>
-              <span class="store-name">珠海</span>
-              <span class="sales">120,540</span>
-              <span style="margin-left: 50px;">
-                19
-                <el-icon class="green">
-                  <CaretTop />
-                </el-icon>
-              </span>
-            </li>
-            <li class="ranking-item">
-              <span class="rank">5</span>
-              <span class="store-name">深圳</span>
-              <span class="sales">66,233</span>
-              <span style="margin-left: 50px;">
-                29
-                <el-icon class="red">
-                  <CaretBottom />
-                </el-icon>
-              </span>
-            </li>
-            <li class="ranking-item">
-              <span class="rank">6</span>
-              <span class="store-name">厦门</span>
-              <span class="sales">54,335</span>
-              <span style="margin-left: 50px;">
-                31
-                <el-icon class="red">
-                  <CaretBottom />
-                </el-icon>
-              </span>
-            </li>
-            <li class="ranking-item">
-              <span class="rank">7</span>
-              <span class="store-name">长沙</span>
-              <span class="sales">33,941</span>
-              <span style="margin-left: 50px;">
-                15
-                <el-icon class="green">
-                  <CaretTop />
-                </el-icon>
-              </span>
+        <ul class="ranking-list">
+          <li class="ranking-item">
+            <span class="rank" style="background-color: rgb(103, 194, 58); color: #f4f3f3;">1</span>
+            <span class="store-name">广州</span>
+            <span class="sales">512,457</span>
+            <span style="margin-left: 50px;">
+              24
+              <el-icon class="green">
+                <CaretTop />
+              </el-icon>
+            </span>
+          </li>
+          <li class="ranking-item">
+            <span class="rank" style="background-color: rgb(15,131,218); color: #f4f3f3;">2</span>
+            <span class="store-name">上海</span>
+            <span class="sales">323,234</span>
+            <span style="margin-left: 50px;">
+              21
+              <el-icon class="red">
+                <CaretBottom />
+              </el-icon>
+            </span>
+          </li>
+          <li class="ranking-item">
+            <span class="rank" style="background-color: rgb(245,109, 81); color: #f4f3f3;">3</span>
+            <span class="store-name">佛山</span>
+            <span class="sales">193,255</span>
+            <span style="margin-left: 50px;">
+              37
+              <el-icon class="green">
+                <CaretTop />
+              </el-icon>
+            </span>
+          </li>
+          <li class="ranking-item">
+            <span class="rank">4</span>
+            <span class="store-name">珠海</span>
+            <span class="sales">120,540</span>
+            <span style="margin-left: 50px;">
+              19
+              <el-icon class="green">
+                <CaretTop />
+              </el-icon>
+            </span>
+          </li>
+          <li class="ranking-item">
+            <span class="rank">5</span>
+            <span class="store-name">深圳</span>
+            <span class="sales">66,233</span>
+            <span style="margin-left: 50px;">
+              29
+              <el-icon class="red">
+                <CaretBottom />
+              </el-icon>
+            </span>
+          </li>
+          <li class="ranking-item">
+            <span class="rank">6</span>
+            <span class="store-name">厦门</span>
+            <span class="sales">54,335</span>
+            <span style="margin-left: 50px;">
+              31
+              <el-icon class="red">
+                <CaretBottom />
+              </el-icon>
+            </span>
+          </li>
+          <li class="ranking-item">
+            <span class="rank">7</span>
+            <span class="store-name">长沙</span>
+            <span class="sales">33,941</span>
+            <span style="margin-left: 50px;">
+              15
+              <el-icon class="green">
+                <CaretTop />
+              </el-icon>
+            </span>
 
-            </li>
-          </ul>
+          </li>
+        </ul>
       </el-card>
       <el-card class="mt ml">
         <template #header>
@@ -519,91 +505,100 @@ const handleClick = (e: Event) => {
 </template>
 
 <style lang="less" scoped>
-  .title {
-    display: flex;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    align-items: flex-end;
-    margin-bottom: 20px;
+.title {
+  display: flex;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  align-items: flex-end;
+  margin-bottom: 20px;
+
+  p {
+    color: #86909c;
+
+  }
+}
+
+.quick {
+  .el-col {
+    img:hover {
+      cursor: pointer;
+    }
+
     p {
-      color: #86909c;
-
+      cursor: pointer;
     }
   }
+}
 
-  .quick {
-    .el-col {
-      img:hover {
-        cursor: pointer;
-      }
-      p{
-        cursor: pointer;
-      }
+.refresh-icon:hover {
+  cursor: pointer;
+}
+
+.equipment {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 50px;
+
+  .item {
+    h1 {
+      font-size: 36px;
+    }
+
+    ::v-deep .el-statistic__content {
+      margin-top: 5px !important;
+      margin-bottom: 10px !important;
     }
   }
+}
 
-  .refresh-icon:hover {
-    cursor: pointer;
+.quick {
+  text-align: center;
+  margin-top: 20px;
+
+  p {
+    margin-top: 10px;
+    color: #333;
   }
+}
 
-  .equipment {
+.ranking-list {
+  .ranking-item {
     display: flex;
     justify-content: space-between;
-    padding: 0 50px;
-    .item {
-      h1{ 
-        font-size: 36px;
-      }
-      ::v-deep .el-statistic__content{
-        margin-top: 5px !important;
-        margin-bottom: 10px !important;
-      }
+    padding: 10px;
+
+    .rank {
+      display: inline-block;
+      font-weight: 700;
+      color: #666;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 25px;
+    }
+
+    .store-name {
+      flex-grow: 1;
+      padding: 0 10px;
+    }
+
+    .sales {
+      color: #666;
     }
   }
 
-  .quick{
-    text-align: center;
-    margin-top: 20px;
-    p{
-      margin-top: 10px;
-      color: #333;
-    }
+  .ranking-item:nth-child(even) {
+    background-color: rgb(253, 246, 236);
   }
+}
 
-  .ranking-list {
-    .ranking-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      .rank{
-        display: inline-block;
-        font-weight: 700;
-        color: #666;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        text-align: center;
-        line-height: 25px;
-      }
-      .store-name{
-        flex-grow: 1;
-        padding: 0 10px;
-      }
-      .sales{
-        color:#666;
-      }
-    }
-    .ranking-item:nth-child(even){
-      background-color: rgb(253, 246, 236);
-    }
-  }
+.green {
+  color: var(--el-color-success);
+}
 
-  .green {
-    color: var(--el-color-success);
-  }
-  .red {
-    color: var(--el-color-error);
-  }
-
+.red {
+  color: var(--el-color-error);
+}
 </style>

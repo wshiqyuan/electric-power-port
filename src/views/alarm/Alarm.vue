@@ -5,7 +5,7 @@ import type { AlarmList } from '@/types/alarm'
 import { ElMessage } from 'element-plus'
 import { getLabel } from './fieldLabelMap'
 import StepForm from '@/components/stepForm/StepForm.vue'
-import type{ FormInstance } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import { assignAlarm } from '@/api/alarm'
 
 const topRadio = ref<number>(0)
@@ -25,9 +25,9 @@ const loadingData = async () => {
     ElMessage.error('获取告警列表失败')
     loading.value = false
   }
-} 
+}
 
-onMounted( async() => {
+onMounted(async () => {
   await loadingData()
 })
 
@@ -184,22 +184,17 @@ const handleSubmit = async () => {
             <span v-else>{{ val }}</span>
           </el-descriptions-item>
           <el-descriptions-item label="操作">
-            <el-button 
-              @click="handleDrawer(item.status, item.equNo)" 
-              :type="item.status === 1 ? 'primary' : item.status === 2 ? 'warning' : 'danger'"
-            >
+            <el-button @click="handleDrawer(item.status, item.equNo)"
+              :type="item.status === 1 ? 'primary' : item.status === 2 ? 'warning' : 'danger'">
               {{ item.status === 1 ? '指派' : item.status === 2 ? '催办' : '查看' }}
             </el-button>
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
     </div>
-    <el-drawer
-      title="报警任务指派"
-      v-model="drawer"
-      v-if="drawer"
-    >
-      <StepForm @submit="handleSubmit" :submitLoading="submitLoading" :steps="steps" :FormRef1="basicFormRef" :FormRef2="approvalFormRef" :FormRef3="managerFormRef">
+    <el-drawer title="报警任务指派" v-model="drawer" v-if="drawer">
+      <StepForm @submit="handleSubmit" :submitLoading="submitLoading" :steps="steps" :FormRef1="basicFormRef"
+        :FormRef2="approvalFormRef" :FormRef3="managerFormRef">
         <template #step-1>
           <el-form :model="formData.basicInfo" :rules="basicInfoRules" ref="basicFormRef">
             <el-form-item label="姓名" prop="name">
@@ -219,7 +214,7 @@ const handleSubmit = async () => {
             </el-form-item>
             <el-form-item label="其他">
               <el-checkbox-group v-model="formData.basicInfo.other">
-                <el-checkbox value="1" >更换设备</el-checkbox>
+                <el-checkbox value="1">更换设备</el-checkbox>
                 <el-checkbox value="2">仅维修</el-checkbox>
                 <el-checkbox value="3">需拍照</el-checkbox>
                 <el-checkbox value="4">需报备</el-checkbox>
@@ -231,7 +226,8 @@ const handleSubmit = async () => {
           </el-form>
         </template>
         <template #step-2>
-          <el-form ref="approvalFormRef" :rules="approvalInfoRules" :model="formData.approvalInfo" :FormRef2="approvalFormRef">
+          <el-form ref="approvalFormRef" :rules="approvalInfoRules" :model="formData.approvalInfo"
+            :FormRef2="approvalFormRef">
             <el-form-item label="审批部门" prop="approvalDepartment">
               <el-select placeholder="请选择审批部门" v-model="formData.approvalInfo.approvalDepartment">
                 <el-option label="总裁办" value="1"></el-option>
@@ -263,12 +259,8 @@ const handleSubmit = async () => {
           </el-form>
         </template>
       </StepForm>
-      <el-result
-        v-show="tipShow"
-        icon="warning"
-        :title="`设备编号：${drawerData.equNo}`"
-        :sub-title="`${drawerData.status === 1 ? '待指派,请尽快派人处理' : drawerData.status === 2 ? '已派发表单，正在催促处理中' : '处理异常，请派专人前往指导'}`"
-      >
+      <el-result v-show="tipShow" icon="warning" :title="`设备编号：${drawerData.equNo}`"
+        :sub-title="`${drawerData.status === 1 ? '待指派,请尽快派人处理' : drawerData.status === 2 ? '已派发表单，正在催促处理中' : '处理异常，请派专人前往指导'}`">
         <template #extra>
           <el-button type="primary" @click="tipShow = false">我已知晓</el-button>
         </template>
@@ -279,15 +271,14 @@ const handleSubmit = async () => {
 
 <style lang="less" scoped>
 ::v-deep .el-radio-button__inner:hover {
-  background-color: rgb(43,137,211) !important;
+  background-color: rgb(43, 137, 211) !important;
   color: #fff !important;
 }
 
 ::v-deep .is-active {
   .el-radio-button__inner {
-    background-color: rgb(43,137,211) !important;
+    background-color: rgb(43, 137, 211) !important;
     color: #fff !important;
   }
 }
-
 </style>

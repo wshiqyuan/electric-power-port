@@ -8,7 +8,7 @@ const formData = ref({
   holderPhone: ''
 })
 
-const {tableData, loading, loadData, totals, pageInfo, handleCurrentChange, handleSizeChange} = useTable("/member", formData)
+const { tableData, loading, loadData, totals, pageInfo, handleCurrentChange, handleSizeChange } = useTable("/member", formData)
 
 const handleReset = () => {
   formData.value = {
@@ -18,8 +18,6 @@ const handleReset = () => {
   }
 }
 
-
-
 </script>
 
 <template>
@@ -28,7 +26,7 @@ const handleReset = () => {
       <el-row :gutter="20">
         <el-col :span="6">
           <el-input v-model.trim="formData.memberCardNumber" placeholder="请输入会员卡号" />
-        </el-col>  
+        </el-col>
         <el-col :span="6">
           <el-input v-model.trim="formData.holderName" placeholder="请输入会员姓名" />
         </el-col>
@@ -66,18 +64,9 @@ const handleReset = () => {
         </el-table-column>
         <el-table-column prop="validUntil" label="有效期至" />
       </el-table>
-      <el-pagination
-        v-show="totals > 0"
-        v-model:current-page="pageInfo.page"
-        v-model:page-size="pageInfo.pageSize"
-        :page-sizes="[10, 20, 30, 40]"
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-        :pager-count="5"
-        :total="totals"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination v-show="totals > 0" v-model:current-page="pageInfo.page" v-model:page-size="pageInfo.pageSize"
+        :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" background :pager-count="5"
+        :total="totals" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
   </div>
 </template>
@@ -89,5 +78,4 @@ const handleReset = () => {
   margin-top: 20px;
   margin-bottom: 5px;
 }
-
 </style>

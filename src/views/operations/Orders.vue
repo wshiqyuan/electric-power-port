@@ -32,12 +32,12 @@ interface Order {
 const date = ref<any>()
 
 const searchParams = ref<SearchParams>({
-  orderNo:'',
-  status:1,
-  number:'',
-  name:'',
-  startDate:'',
-  endDate:''
+  orderNo: '',
+  status: 1,
+  number: '',
+  name: '',
+  startDate: '',
+  endDate: ''
 })
 
 const handleChange = (val: string[]) => {
@@ -51,12 +51,12 @@ const { tableData, loading, totals, pageInfo, loadData, handleSizeChange, handle
 const resetForm = () => {
   date.value = ''
   searchParams.value = {
-    orderNo:'',
-    status:1,
-    number:'',
-    name:'',
-    startDate:'',
-    endDate:''
+    orderNo: '',
+    status: 1,
+    number: '',
+    name: '',
+    startDate: '',
+    endDate: ''
   }
   resetPaginstion()
 }
@@ -68,16 +68,16 @@ const handleSelectionChange = (selection: Order[]) => {
 
 const deleteLoading = ref<boolean>(false)
 
-const handleBatchDelete = async() => {
-  try{
+const handleBatchDelete = async () => {
+  try {
     deleteLoading.value = true
     const res = await orderDeleteApi(selectedList.value.map((item: Order) => item.orderNo))
-    if(res.code === 200){
+    if (res.code === 200) {
       ElMessage.success(res.data)
       loadData()
     }
     deleteLoading.value = false
-  }catch(err){
+  } catch (err) {
     ElMessage.error('删除失败')
     console.log(err)
     deleteLoading.value = false
@@ -96,14 +96,14 @@ const handleDetail = (orderNo: string) => {
 const route = useRoute()
 
 watch(() => route.name, (to, from) => {
-  if(to === 'Orders' && from !== 'Detail'){
+  if (to === 'Orders' && from !== 'Detail') {
     loadData()
   }
 })
 
 const exportLoading = ref<boolean>(false)
 
-const exportExcel = async() => {
+const exportExcel = async () => {
   try {
     exportLoading.value = true
     // 将数据转成excel表格式
@@ -127,7 +127,7 @@ const throttleExport = throttle(exportExcel, 1000)
 const handleDelete = async (orderNo: string) => {
   try {
     const res = await orderDeleteApi([orderNo])
-    if(res.code === 200){
+    if (res.code === 200) {
       ElMessage.success(res.data)
       loadData()
     }
@@ -165,21 +165,16 @@ const handleDelete = async (orderNo: string) => {
           <el-input placeholder="请输入站点名称" v-model.trim="searchParams.name" />
         </el-col>
         <el-col :span="6" class="mt">
-          <el-date-picker
-            v-model="date"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            @change="handleChange"
-            value-format="YYYY-MM-DD"
-          />
+          <el-date-picker v-model="date" type="daterange" range-separator="至" start-placeholder="开始时间"
+            end-placeholder="结束时间" @change="handleChange" value-format="YYYY-MM-DD" />
         </el-col>
       </el-row>
     </el-card>
     <el-card class="mt">
-      <el-button type="danger" :loading="deleteLoading" @click="handleBatchDelete" :disabled="!selectedList.length">批量删除</el-button>
-      <el-button icon="Download" :loading="exportLoading" @click="throttleExport" type="primary" :disabled="!selectedList.length">导出订单数据到Excel</el-button>
+      <el-button type="danger" :loading="deleteLoading" @click="handleBatchDelete"
+        :disabled="!selectedList.length">批量删除</el-button>
+      <el-button icon="Download" :loading="exportLoading" @click="throttleExport" type="primary"
+        :disabled="!selectedList.length">导出订单数据到Excel</el-button>
     </el-card>
     <el-card class="mt">
       <el-table :data="tableData" v-loading="loading" @selection-change="handleSelectionChange">
@@ -192,22 +187,17 @@ const handleDelete = async (orderNo: string) => {
         <el-table-column label="结束时间" prop="endTime" />
         <el-table-column label="订单金额" prop="money" />
         <el-table-column label="支付方式" prop="pay" />
-        <el-table-column label="订单状态" prop="status" >
+        <el-table-column label="订单状态" prop="status">
           <template #default="scope">
-            <el-tag :type="scope.row.status === 2 ? 'success' : scope.row.status === 3 ? 'primary': 'warning'">{{ scope.row.status === 2 ? '进行中' : scope.row.status === 3 ? '已完成' : '异常' }}</el-tag>
+            <el-tag :type="scope.row.status === 2 ? 'success' : scope.row.status === 3 ? 'primary' : 'warning'">{{
+              scope.row.status === 2 ? '进行中' : scope.row.status === 3 ? '已完成' : '异常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button type="primary" size="small" @click="handleDetail(scope.row.orderNo)">详情</el-button>
-            <el-popconfirm
-              confirm-button-text="是"
-              cancel-button-text="否"
-              icon="WarningFilled"
-              icon-color="#F56C6C"
-              title="确定删除当前订单吗?"
-              @confirm="handleDelete(scope.row.orderNo)"
-            >
+            <el-popconfirm confirm-button-text="是" cancel-button-text="否" icon="WarningFilled" icon-color="#F56C6C"
+              title="确定删除当前订单吗?" @confirm="handleDelete(scope.row.orderNo)">
               <template #reference>
                 <el-button type="danger" size="small">删除</el-button>
               </template>
@@ -215,18 +205,9 @@ const handleDelete = async (orderNo: string) => {
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        v-show="totals > 0"
-        v-model:current-page="pageInfo.page"
-        v-model:page-size="pageInfo.pageSize"
-        :page-sizes="[10, 20, 30, 40]"
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-        :pager-count="5"
-        :total="totals"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination v-show="totals > 0" v-model:current-page="pageInfo.page" v-model:page-size="pageInfo.pageSize"
+        :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" background :pager-count="5"
+        :total="totals" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
   </div>
 </template>

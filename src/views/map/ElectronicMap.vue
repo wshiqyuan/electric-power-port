@@ -2,18 +2,18 @@
 import MapContain from '@/components/map/MapContain.vue'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import type{ FormRules, FormInstance } from 'element-plus'
+import type { FormRules, FormInstance } from 'element-plus'
 import { postStationApi } from '@/api/map'
 
 const detailData: any = [
-  {id: 1, name: '累计充电站数量', context: 34},
-  {id: 2, name: '单省份最多充电桩', context: "广州"},
-  {id: 3, name: '充电站遍及省份', context: 22},
-  {id: 4, name: '暂无充电桩省份', context: 12},
-  {id: 5, name: '累计充电桩', context: 2031},
-  {id: 6, name: '单日营收最高', context: "深圳大梅沙充电站"},
-  {id: 7, name: '单日营收最低', context: "贵阳甲秀楼充电站"},
-  {id: 8, name: '故障率最高', context: "兰州黄河桥充电站"}
+  { id: 1, name: '累计充电站数量', context: 34 },
+  { id: 2, name: '单省份最多充电桩', context: "广州" },
+  { id: 3, name: '充电站遍及省份', context: 22 },
+  { id: 4, name: '暂无充电桩省份', context: 12 },
+  { id: 5, name: '累计充电桩', context: 2031 },
+  { id: 6, name: '单日营收最高', context: "深圳大梅沙充电站" },
+  { id: 7, name: '单日营收最低', context: "贵阳甲秀楼充电站" },
+  { id: 8, name: '故障率最高', context: "兰州黄河桥充电站" }
 ]
 
 const form = reactive<any>({
@@ -44,7 +44,7 @@ const rules = reactive<FormRules<any>>({
 const formRef = ref<FormInstance>()
 const updataLoading = ref<boolean>(false)
 
-const addStation = async() => {
+const addStation = async () => {
   if (!form.name || !form.region || !form.longitude || !form.latitude) {
     ElMessage.error('请填写完整信息')
     return
@@ -57,7 +57,7 @@ const addStation = async() => {
         ElMessage.success('新增成功')
         resetForm()
         updataLoading.value = false
-      } catch (error:any) {
+      } catch (error: any) {
         ElMessage.error(error.message)
         updataLoading.value = false
       }
@@ -82,7 +82,9 @@ const addStation = async() => {
               <h4>站点信息</h4>
             </div>
           </template>
-          <div v-for="item in detailData" :key="item.id">{{ `${item.id}.${item.name}` }}：<el-text type="primary">{{ item.context }}</el-text></div>
+          <div v-for="item in detailData" :key="item.id">{{ `${item.id}.${item.name}` }}：<el-text type="primary">{{
+            item.context
+              }}</el-text></div>
         </el-card>
         <el-card class="mt" v-permission="['admin']">
           <template #header>
@@ -122,12 +124,12 @@ const addStation = async() => {
 
 <style lang="less" scoped>
 .map-card {
-  line-height: 35px;  
+  line-height: 35px;
 }
 
-::v-deep .amap-copyright, ::v-deep .amap-logo {
+::v-deep .amap-copyright,
+::v-deep .amap-logo {
   display: none !important;
   visibility: hidden !important;
 }
-
 </style>
