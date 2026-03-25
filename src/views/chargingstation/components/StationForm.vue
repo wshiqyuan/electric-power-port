@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import type { FormRules } from 'element-plus'
-import type { RowType } from '@/types/station'
+import type { RowType, StationFormProps } from '@/types/station'
 import { useStationStore } from '@/store/station'
 import { storeToRefs } from 'pinia'
 
@@ -60,12 +60,8 @@ const { rowData } = storeToRefs(stationStore)
 
 const disabled = ref(false)
 
-const props = defineProps({
-  dialogVisible: {
-    type: Boolean,
-    required: true,
-    default: false
-  }
+const props = withDefaults(defineProps<StationFormProps>(), {
+  dialogVisible: false
 })
 
 const handleCancel = () => {

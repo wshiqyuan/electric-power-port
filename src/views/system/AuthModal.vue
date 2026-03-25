@@ -5,26 +5,10 @@ import { storeToRefs } from 'pinia'
 import { transformMenu } from '@/utils/transformMenu'
 import { setAuthApi } from '@/api/system'
 import { ElMessage } from 'element-plus'
+import type { AuthModalProps } from '@/types/system'
 
 // 页面权限组件
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    required: true,
-  },
-  checkedKeys: {
-    type: Array,
-    required: true,
-  },
-  btnAuth: {
-    type: Array,
-    required: true,
-  },
-  accountNum: {
-    type: String,
-    required: true,
-  }
-})
+const props = withDefaults(defineProps<AuthModalProps>(), {})
 
 const emits = defineEmits(['close', 'reload'])
 

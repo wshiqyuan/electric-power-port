@@ -1,4 +1,4 @@
-interface RowType {
+export interface RowType {
   name: string;
   id: string;
   city: string;
@@ -11,4 +11,6 @@ interface RowType {
   tel: string;
 }
 
-export type { RowType };
+export interface StationFormProps {
+  dialogVisible: boolean;
+}
