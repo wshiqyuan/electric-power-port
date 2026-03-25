@@ -1,46 +1,36 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { MenuItem as MenuItemType } from '@/types/user'
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import type { MenuItemProps } from '@/types/user'
 import { useTabsStore } from '@/store/tabs'
 
-export default defineComponent({
-  name: "MyMenu",
-  props: {
-    item: {
-      type: Object as PropType<MenuItemType>,
-      required: true
-    }
-  },
-  setup() {
-    const tabsStore = useTabsStore()
-    const { addTab, setCurrentTab } = tabsStore
-    const add = (name: string, url: string, icon: string) => {
-      addTab(name, url, icon)
-      setCurrentTab(name, url)
-    }
-    return {
-      add
-    }
-  }
-})
+defineOptions({ name: 'MenuItem' })
+
+const props = withDefaults(defineProps<MenuItemProps>(), {})
+
+const tabsStore = useTabsStore()
+const { addTab, setCurrentTab } = tabsStore
+
+const add = (name: string, url: string, icon: string) => {
+  addTab(name, url, icon)
+  setCurrentTab(name, url)
+}
 </script>
 
 <template>
-  <el-sub-menu v-if="item.children" :index="item.url">
+  <el-sub-menu v-if="props.item.children" :index="props.item.url">
     <template #title>
       <el-icon>
-        <component :is="item.icon" />
+        <component :is="props.item.icon" />
       </el-icon>
-      <span>{{ item.name }}</span>
+      <span>{{ props.item.name }}</span>
     </template>
-    <my-menu v-for="child in item.children" :item="child" :key="child.url"></my-menu>
+    <menu-item v-for="child in props.item.children" :item="child" :key="child.url"></menu-item>
   </el-sub-menu>
-  <el-menu-item v-else :index="item.url" @click="add(item.name, item.url, item.icon)" v-show="!(item.name === '订单详情')">
+  <el-menu-item v-else :index="props.item.url" @click="add(props.item.name, props.item.url, props.item.icon)"
+    v-show="!(props.item.name === '订单详情')">
     <el-icon>
-      <component :is="item.icon" />
+      <component :is="props.item.icon" />
     </el-icon>
-    <span>{{ item.name }}</span>
+    <span>{{ props.item.name }}</span>
   </el-menu-item>
 </template>
 

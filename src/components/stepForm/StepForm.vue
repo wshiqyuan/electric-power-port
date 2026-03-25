@@ -21,8 +21,6 @@ const nextStep = () => {
   })
 }
 
-
-
 </script>
 
 <template>
