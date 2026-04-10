@@ -109,8 +109,6 @@ const { total, pageInfo, handleSizeChange, handleCurrentChange, setTotal } = use
 onMounted(async () => {
   await loadData()
 })
-
-
 </script>
 
 <template>

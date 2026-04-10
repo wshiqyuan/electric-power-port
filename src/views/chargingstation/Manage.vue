@@ -81,8 +81,6 @@ const gridData = [
     detail: '已完成',
   },
 ]
-
-
 </script>
 
 <template>

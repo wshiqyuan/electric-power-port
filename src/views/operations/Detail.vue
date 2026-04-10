@@ -296,5 +296,3 @@ const fetchData = async () => {
     </el-card>
   </div>
 </template>
-
-<style lang="scss" scoped></style>

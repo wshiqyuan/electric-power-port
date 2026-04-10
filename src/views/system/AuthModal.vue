@@ -29,14 +29,11 @@ const handleClose = () => {
   emits('reload')
 }
 
-
 // 按钮权限组件
 const initBtnAuth = ref<string[]>([])
 
 
 // 提交表单
-
-
 const updataLoading = ref<boolean>(false)
 
 const handleConfirm = async () => {
@@ -55,8 +52,6 @@ const handleConfirm = async () => {
     ElMessage.error("权限设置失败")
   }
 }
-
-
 </script>
 
 <template>

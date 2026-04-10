@@ -198,7 +198,7 @@ const handleRead = (title: string, type: string) => {
               <div style="display: flex; justify-content: space-between;">
                 <h3>{{ item.content }}</h3>
                 <p>{{ item.time }}</p>
-                <el-button type="primary" @click="handleRead(item.title, item.type)">已知晓</el-button>
+                <el-button type="primary" @click="handleRead(item.title, item.type)">已读</el-button>
               </div>
             </el-collapse-item>
           </el-collapse>
