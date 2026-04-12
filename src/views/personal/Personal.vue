@@ -129,8 +129,9 @@ const handleRead = (title: string, type: string) => {
             <el-descriptions-item label="电话">{{ infoList.phone }}</el-descriptions-item>
             <el-descriptions-item label="地址">{{ infoList.address }}</el-descriptions-item>
             <el-descriptions-item label="个人标签">
-              <el-tag size="small" type="primary" class="mr" v-for="item in infoList.personalTag" :key="item">{{ item
-              }}</el-tag>
+              <el-tag size="small" type="primary" class="mr" v-for="item in infoList.personalTag" :key="item">
+                {{ item }}
+              </el-tag>
             </el-descriptions-item>
           </el-descriptions>
         </el-card>
