@@ -16,7 +16,7 @@ const add = (name: string, url: string, icon: string) => {
 </script>
 
 <template>
-  <el-sub-menu v-if="props.item.children" :index="props.item.url">
+  <el-sub-menu v-if="props.item.children && props.item.children.length > 0" :index="props.item.url">
     <template #title>
       <el-icon>
         <component :is="props.item.icon" />
